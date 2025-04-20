@@ -1,10 +1,11 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="en">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>组件展示 - AI科技知识库</title>
+    <title>Component Showcase - AI Tech Knowledge Base</title>
+
     <link rel="stylesheet" href="/public/css/styles.css">
     <link rel="stylesheet" href="components/avatar-uploader.css">
     <link rel="stylesheet" href="components/notification.css">
@@ -14,6 +15,7 @@
     <link rel="icon" href="https://cdn-icons-png.flaticon.com/512/2103/2103652.png" type="image/png">
     <script src="../public/js/main.js" defer></script>
     <script src="../public/js/auth.js" defer></script>
+
     <script src="components/avatar-uploader.js" defer></script>
     <script src="components/notification.js" defer></script>
     <script src="components/theme-switcher.js" defer></script>
@@ -21,7 +23,7 @@
     <style>
         .demo-section {
             margin-bottom: var(--spacing-2xl);
-            padding: var(--spacing-xl);
+            padding: var(--spacing-lg) var(--spacing-xl); /* Reduced top/bottom padding */
             background: var(--card-bg);
             border-radius: var(--border-radius-lg);
             box-shadow: var(--shadow-md);
@@ -29,12 +31,12 @@
 
         .demo-title {
             font-size: 1.5rem;
-            margin-bottom: var(--spacing-lg);
-            padding-bottom: var(--spacing-sm);
+            margin-bottom: var(--spacing-md);
+            padding-bottom: var(--spacing-xs);
             border-bottom: 1px solid var(--border-color);
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: var(--spacing-sm);
         }
 
         .demo-title i {
@@ -49,7 +51,7 @@
         .demo-controls {
             display: flex;
             gap: var(--spacing-md);
-            margin-bottom: var(--spacing-lg);
+            margin-bottom: var(--spacing-md);
             flex-wrap: wrap;
         }
 
@@ -61,7 +63,7 @@
             border-radius: var(--border-radius-md);
             cursor: pointer;
             transition: var(--transition-base);
-            display: flex;
+            display: inline-flex; /* Changed to inline-flex */
             align-items: center;
             gap: 8px;
         }
@@ -72,16 +74,18 @@
             box-shadow: var(--shadow-md);
         }
 
+        /* Slightly reduced padding for content */
         .demo-content {
-            padding: var(--spacing-lg);
+            padding: var(--spacing-md);
             background: var(--bg-secondary);
             border-radius: var(--border-radius-md);
         }
 
+        /* Reduced padding for articles */
         .article-content {
-            padding: var(--spacing-lg);
+            padding: var(--spacing-md);
             background: var(--bg-secondary);
-            border-radius: var(--border-radius-md);
+            border-radius: var(--border-radius-sm); /* Slightly smaller radius */
             margin-bottom: var(--spacing-lg);
         }
 
@@ -91,7 +95,7 @@
         }
 
         .article-text {
-            margin-bottom: var(--spacing-md);
+            margin-bottom: var(--spacing-sm); /* Reduced margin */
             line-height: 1.6;
         }
     </style>
@@ -99,7 +103,7 @@
 </head>
 
 <body>
-    <div class="container">
+    <div class="app-container">
         <aside class="sidebar">
             <div class="logo-container">
                 <div class="logo-text">
@@ -110,20 +114,24 @@
                     <i class="fas fa-moon"></i>
                 </button>
             </div>
-            
-            <div class="category-nav">
-                <h3 class="section-title">导航</h3>
-                <button data-href="../index.html""><i class="fas fa-home"></i> 返回首页</button>
-                <button class="active"><i class="fas fa-puzzle-piece"></i> 组件展示</button>
-                <button data-href="/profile.html""><i class="fas fa-user"></i> 个人中心</button>
-            </div>
-            
-            <div class="category-nav">
-                <h3 class="section-title">组件导航</h3>
-                <button onclick="scrollToSection('avatar-uploader-demo')"><i class="fas fa-user-circle"></i> 头像上传</button>
-                <button onclick="scrollToSection('notification-demo')"><i class="fas fa-bell"></i> 通知提示</button>
-                <button onclick="scrollToSection('theme-switcher-demo')"><i class="fas fa-adjust"></i> 主题切换</button>
-                <button onclick="scrollToSection('community-interaction-demo')"><i class="fas fa-comments"></i> 社区互动</button>
+
+            <nav class="main-nav">
+                <h3 class="nav-title">Navigation</h3>
+                <ul>
+                    <li><a href="../index.html"><i class="fas fa-home"></i> Home</a></li>
+                    <li class="active"><a href="#"><i class="fas fa-puzzle-piece"></i> Components</a></li>
+                    <li><a href="/profile.html"><i class="fas fa-user"></i> Profile</a></li>
+                </ul>
+            </nav>
+
+            <nav class="component-nav">
+                <h3 class="nav-title">Components</h3>
+                <ul>
+                    <li><a href="#avatar-uploader-demo"><i class="fas fa-user-circle"></i> Avatar Upload</a></li>
+                    <li><a href="#notification-demo"><i class="fas fa-bell"></i> Notifications</a></li>
+                    <li><a href="#theme-switcher-demo"><i class="fas fa-adjust"></i> Theme Switcher</a></li>
+                    <li><a href="#community-interaction-demo"><i class="fas fa-comments"></i> Interactions</a></li>
+                </ul>
             </div>
         </aside>
         
@@ -131,15 +139,14 @@
             <div class="header-section">
                 <div class="header-content">
                     <div>
-                        <h1 class="main-title">组件展示</h1>
-                        <p class="subtitle">展示AI科技知识库的各种UI组件和交互功能</p>
+                        <h1 class="main-title">Component Showcase</h1>
+                        <p class="subtitle">Explore the UI components and interactive features of the AI Tech Knowledge Base.</p>
                     </div>
                 </div>
             </div>
 
-            <!-- 头像上传组件演示 -->
             <section id="avatar-uploader-demo" class="demo-section">
-                <h2 class="demo-title"><i class="fas fa-user-circle"></i> 头像上传组件</h2>
+                <h2 class="demo-title"><i class="fas fa-user-circle"></i> Avatar Upload</h2>
                 <p class="demo-description">支持拖放上传、预览和裁剪功能的头像上传组件。</p>
                 
                 <div class="demo-content">
@@ -147,129 +154,89 @@
                 </div>
             </section>
 
-            <!-- 通知组件演示 -->
             <section id="notification-demo" class="demo-section">
-                <h2 class="demo-title"><i class="fas fa-bell"></i> 通知提示组件</h2>
-                <p class="demo-description">用于显示操作成功、错误、警告和信息提示的通知组件。</p>
-                
+                <h2 class="demo-title"><i class="fas fa-bell"></i> Notifications</h2>
+                <p class="demo-description">Components for displaying success, error, warning, and information notifications.</p>
+
                 <div class="demo-controls">
-                    <button class="demo-btn" id="show-success-notification">
-                        <i class="fas fa-check-circle"></i> 显示成功通知
-                    </button>
-                    <button class="demo-btn" id="show-error-notification">
-                        <i class="fas fa-exclamation-circle"></i> 显示错误通知
-                    </button>
-                    <button class="demo-btn" id="show-warning-notification">
-                        <i class="fas fa-exclamation-triangle"></i> 显示警告通知
-                    </button>
-                    <button class="demo-btn" id="show-info-notification">
-                        <i class="fas fa-info-circle"></i> 显示信息通知
-                    </button>
+                    <button id="show-success-notification" class="demo-btn"><i class="fas fa-check-circle"></i> Success</button>
+                    <button id="show-error-notification" class="demo-btn"><i class="fas fa-exclamation-circle"></i> Error</button>
+                    <button id="show-warning-notification" class="demo-btn"><i class="fas fa-exclamation-triangle"></i> Warning</button>
+                    <button id="show-info-notification" class="demo-btn"><i class="fas fa-info-circle"></i> Info</button>
                 </div>
             </section>
 
-            <!-- 主题切换组件演示 -->
             <section id="theme-switcher-demo" class="demo-section">
-                <h2 class="demo-title"><i class="fas fa-adjust"></i> 主题切换组件</h2>
-                <p class="demo-description">提供浅色/深色主题切换功能的组件。</p>
-                
+                <h2 class="demo-title"><i class="fas fa-adjust"></i> Theme Switcher</h2>
+                <p class="demo-description">Component for switching between light and dark themes.</p>
+
                 <div class="demo-controls">
-                    <button class="demo-btn" id="toggle-theme-btn">
-                        <i class="fas fa-moon"></i> 切换主题
-                    </button>
+                    <button id="toggle-theme-btn" class="demo-btn"><i class="fas fa-moon"></i> Toggle Theme</button>
                 </div>
-                
+
                 <div class="demo-content">
-                    <p>当前主题: <span id="current-theme">浅色</span></p>
-                    <p>主题切换组件会自动保存用户的主题偏好，并在页面加载时应用。</p>
+                    <p>Current theme: <span id="current-theme">Light</span></p>
+                    <p>The theme preference is automatically saved and applied on page load.</p>
                 </div>
             </section>
 
-            <!-- 社区互动组件演示 -->
             <section id="community-interaction-demo" class="demo-section">
-                <h2 class="demo-title"><i class="fas fa-comments"></i> 社区互动组件</h2>
-                <p class="demo-description">提供评论、点赞、收藏等社区互动功能的组件。</p>
-                
+                <h2 class="demo-title"><i class="fas fa-comments"></i> Community Interactions</h2>
+                <p class="demo-description">Components for community interactions: comments, likes, favorites, etc.</p>
+
                 <div class="article-content" data-post-id="demo-post-1">
-                    <h3 class="article-title">生成式AI的发展与应用</h3>
-                    <p class="article-text">生成式AI技术在近年来取得了突破性进展，特别是大型语言模型（LLM）如GPT系列、Claude和Llama等的出现，彻底改变了人们与AI交互的方式。这些模型能够生成高质量的文本、图像、音频和视频内容，为创意产业、教育、医疗等领域带来了革命性的变化。</p>
-                    <p class="article-text">然而，生成式AI也带来了一系列挑战，包括内容真实性验证、版权问题、就业影响等。如何负责任地开发和使用这些技术，将成为未来社会需要共同面对的重要议题。</p>
+                    <h3 class="article-title">The Evolution and Applications of Generative AI</h3>
+                    <p class="article-text">Generative AI has made groundbreaking progress, particularly with Large Language Models (LLMs) like GPT series, Claude, and Llama, fundamentally changing how we interact with AI. These models can generate high-quality text, images, audio, and video, revolutionizing creative industries, education, and healthcare.</p>
+                    <p class="article-text">However, generative AI also presents challenges, including content verification, copyright, and employment impacts. Responsible development and use are crucial for society.</p>
                 </div>
             </section>
         </main>
     </div>
 
     <script>
-        // 页面滚动到指定区域
-        function scrollToSection(sectionId) {
-            const section = document.getElementById(sectionId);
-            if (section) {
-                section.scrollIntoView({ behavior: 'smooth' });
+        document.addEventListener('DOMContentLoaded', () => {
+            // Notification Demos
+            const notificationTriggers = {
+                'show-success-notification': () => window.notifications.success('Operation successful!'),
+                'show-error-notification': () => window.notifications.error('Operation failed. Please try again later.'),
+                'show-warning-notification': () => window.notifications.warning('This action cannot be undone.'),
+                'show-info-notification': () => window.notifications.info('System maintenance tonight at 10 PM.')
+            };
+
+            for (const [id, trigger] of Object.entries(notificationTriggers)) {
+                document.getElementById(id).addEventListener('click', () => {
+                    if (window.notifications) {
+                        trigger();
+                    }
+                });
             }
-        }
 
-        // 通知组件演示
-        document.addEventListener('DOMContentLoaded', function() {
-            // 成功通知
-            document.getElementById('show-success-notification').addEventListener('click', function() {
-                if (window.notifications) {
-                    window.notifications.success('操作已成功完成！');
-                }
-            });
-            
-            // 错误通知
-            document.getElementById('show-error-notification').addEventListener('click', function() {
-                if (window.notifications) {
-                    window.notifications.error('操作失败，请稍后重试。');
-                }
-            });
-            
-            // 警告通知
-            document.getElementById('show-warning-notification').addEventListener('click', function() {
-                if (window.notifications) {
-                    window.notifications.warning('请注意，此操作不可撤销。');
-                }
-            });
-            
-            // 信息通知
-            document.getElementById('show-info-notification').addEventListener('click', function() {
-                if (window.notifications) {
-                    window.notifications.info('系统将于今晚10点进行维护。');
-                }
-            });
-
-            // 主题切换演示
+            // Theme Switcher Demo
             const toggleThemeBtn = document.getElementById('toggle-theme-btn');
             const currentThemeText = document.getElementById('current-theme');
-            
-            // 更新当前主题显示
-            function updateThemeDisplay() {
-                if (document.body.classList.contains('dark-theme')) {
-                    currentThemeText.textContent = '深色';
-                    toggleThemeBtn.querySelector('i').className = 'fas fa-sun';
-                } else {
-                    currentThemeText.textContent = '浅色';
-                    toggleThemeBtn.querySelector('i').className = 'fas fa-moon';
+
+            const updateThemeDisplay = () => {
+                const isDark = document.body.classList.contains('dark-theme');
+                currentThemeText.textContent = isDark ? 'Dark' : 'Light';
+                toggleThemeBtn.querySelector('i').className = isDark ? 'fas fa-sun' : 'fas fa-moon';
+            };
+
+            const setTheme = (theme) => {
+                document.body.classList.toggle('dark-theme', theme === 'dark');
+                updateThemeDisplay();
+                localStorage.setItem('ai_tech_theme', theme);
+                if (window.notifications) {
+                    window.notifications.info(`Switched to ${theme === 'dark' ? 'Dark' : 'Light'} theme`);
                 }
-            }
-            
-            // 初始更新
-            updateThemeDisplay();
-            
-            // 切换主题按钮
-            toggleThemeBtn.addEventListener('click', function() {
+            };
+
+            toggleThemeBtn.addEventListener('click', () => {
                 document.body.classList.toggle('dark-theme');
                 updateThemeDisplay();
-                
-                // 保存主题设置
-                const theme = document.body.classList.contains('dark-theme') ? 'dark' : 'light';
-                localStorage.setItem('ai_tech_theme', theme);
-                
-                // 显示通知
-                if (window.notifications) {
-                    window.notifications.info(`已切换到${theme === 'dark' ? '深色' : '浅色'}主题`);
-                }
+                setTheme(document.body.classList.contains('dark-theme') ? 'dark' : 'light');
             });
+
+            updateThemeDisplay();
         });
     </script>
     <script src="../public/js/sidebar-unifier.js" defer></script>

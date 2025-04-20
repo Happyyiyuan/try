@@ -1,20 +1,13 @@
 /**
- * 主要应用脚本 - Main Application Script
- * 处理首页和产品列表页面的交互和数据加载
- * 依赖: config.js, api-client.js, components.js, product-components.js
+ * Main Application Script
+ * Handles interactions and data loading for the homepage and product listing pages.
+ * Dependencies: config.js, api-client.js, components.js, product-components.js
  */
 
-// 使用全局配置
-// 确保使用全局配置中的API_BASE_URL和WS_URL
+// Note: WebSocket connection is now managed by websocket-client.js.
+// The following code has been commented out to avoid duplicate connections.
 
-// 注意: WebSocket连接现在由websocket-client.js管理
-// 以下代码已经被注释掉，以避免重复连接
-
-// 初始化WebSocket连接
-// let ws = null;
-// let reconnectAttempts = 0;
-// const MAX_RECONNECT_ATTEMPTS = 5;
-// const RECONNECT_DELAY = 3000;
+let reconnectAttempts = 0;
 
 // 禁用原有WebSocket初始化，由websocket-client.js管理
 function initWebSocket() {
@@ -29,15 +22,15 @@ function handleWebSocketMessage(data) {
             // ws.send(JSON.stringify({ type: 'pong' }));
             break;
         case 'update':
-            // 处理数据更新
             if (typeof window.handleDataUpdate === 'function') {
                 window.handleDataUpdate(data.data);
             }
             break;
         default:
-            console.log('收到WebSocket消息:', data);
+            console.log('Received WebSocket message:', data);
     }
 }
+
 
 // 获取产品数据
 async function fetchProducts(retryCount = 0) {
@@ -45,14 +38,13 @@ async function fetchProducts(retryCount = 0) {
     const retryDelay = 1000;
 
     try {
-        // Use the API endpoint defined in config.js
         const response = await fetch(`${window.CONFIG.API_BASE_URL}/products`);
         if (!response.ok) {
-            throw new Error(`获取数据失败: ${response.status} ${response.statusText}`);
+            throw new Error(`Failed to fetch data: ${response.status} ${response.statusText}`);
         }
         return await response.json();
     } catch (error) {
-        console.error(`获取数据错误 (尝试 ${retryCount + 1}/${maxRetries + 1}):`, error);
+        console.error(`Error fetching data (attempt ${retryCount + 1}/${maxRetries + 1}):`, error);
 
         if (retryCount < maxRetries) {
             await new Promise(resolve => setTimeout(resolve, retryDelay));
@@ -69,11 +61,11 @@ function displayDataLoadError() {
     const featuredContent = document.getElementById('featured-content');
     if (featuredContent) {
         featuredContent.innerHTML = `
-            <div class="error-message" style="color: var(--error-color); background-color: rgba(239, 68, 68, 0.1); padding: 15px; border-radius: var(--border-radius-md); border: 1px solid var(--error-color);">
-                <i class="fas fa-exclamation-triangle"></i> 抱歉，加载产品数据时遇到问题。请稍后重试。
-            </div>
-        `;
+            <div class="error-message">
+                <i class="fas fa-exclamation-triangle"></i> Sorry, there was a problem loading product data. Please try again later.
+            </div>`;
     }
+
 }
 
 // 更新连接状态UI
@@ -91,17 +83,17 @@ function updateConnectionStatus(connected) {
         statusDiv.style.fontSize = '12px';
         statusDiv.style.zIndex = '9999';
         document.body.appendChild(statusDiv);
-    }
-    
+    }   
     const status = document.getElementById('ws-connection-status');
     if (connected) {
-        status.textContent = '实时连接已建立';
+        status.textContent = 'Real-time connection established';
         status.style.backgroundColor = '#4CAF50';
         status.style.color = 'white';
-        // 3秒后隐藏成功消息
+        
+        // Hide the success message after 3 seconds
         setTimeout(() => {
             status.style.display = 'none';
-        }, 3000);
+        }, 3000)
     } else {
         status.textContent = '实时连接已断开';
         status.style.backgroundColor = '#F44336';
@@ -114,7 +106,7 @@ function updateConnectionStatus(connected) {
 function showConnectionError() {
     const errorContainer = document.createElement('div');
     errorContainer.className = 'connection-error';
-    errorContainer.innerHTML = `
+    errorContainer.innerHTML = ` 
         <div style="padding: 15px; background-color: #ffebee; border-left: 4px solid #f44336; margin: 10px 0;">
             <h3 style="margin-top: 0; color: #d32f2f;">连接错误</h3>
             <p>无法连接到实时服务器。部分功能可能不可用。</p>
@@ -122,7 +114,6 @@ function showConnectionError() {
         </div>
     `;
     
-    // 查找合适的位置插入错误消息
     const mainContent = document.querySelector('.main-content');
     if (mainContent) {
         mainContent.insertBefore(errorContainer, mainContent.firstChild);
@@ -130,7 +121,6 @@ function showConnectionError() {
         document.body.insertBefore(errorContainer, document.body.firstChild);
     }
     
-    // 添加重试按钮事件
     document.getElementById('retry-connection').addEventListener('click', function() {
         errorContainer.remove();
         reconnectAttempts = 0;
@@ -138,8 +128,7 @@ function showConnectionError() {
     });
 }
 
-// WebSocket连接现在由websocket-client.js管理
-// initWebSocket();
+
 
 // --- NEW CODE FOR INDEX.HTML SEARCH, FILTER, AND PAGINATION --- 
 
@@ -160,7 +149,7 @@ function renderProducts(productsToRender) {
     paginationContainer.innerHTML = ''; // Clear previous pagination
 
     if (productsToRender.length === 0) {
-        featuredContent.innerHTML = '<p style="text-align: center; color: var(--text-secondary); grid-column: 1 / -1;">没有找到符合条件的产品。</p>';
+        featuredContent.innerHTML = '<p class="no-products">No products found matching the criteria.</p>';
         return;
     }
 
@@ -174,18 +163,25 @@ function renderProducts(productsToRender) {
     paginatedProducts.forEach(product => {
         const card = document.createElement('div');
         card.className = 'featured-card knowledge-card'; // Use both classes for styling consistency
+        const imageElement = product.image
+            ? `<img src="${product.image}" alt="${product.name}" class="card-image">`
+            : '<div class="card-image-placeholder">No Image</div>';
+
+        const description = product.description
+            ? product.description.substring(0, 100) + '...'
+            : 'No description available';
+
         card.innerHTML = `
-            ${product.image ? `<img src="${product.image}" alt="${product.name}" class="card-image">` : '<div class="card-image-placeholder">无图</div>'}
+            ${imageElement}
             <div class="card-content">
                 <span class="card-category">${product.category || '未知分类'}</span>
                 <h3 class="card-title">${product.name}</h3>
-                <p class="card-description">${product.description ? product.description.substring(0, 100) + '...' : '暂无描述'}</p>
+                <p class="card-description">${description}</p>
                 <div class="card-footer">
-                    ${product.price ? `<span class="card-price">¥${product.price}</span>` : '<span></span>'}
-                    <a href="/html/product.html?id=${product.id}" class="card-link">查看详情 <i class="fas fa-arrow-right"></i></a>
+                    ${product.price ? `<span class="card-price">$${product.price}</span>` : '<span></span>'}
+                    <a href="/html/product.html?id=${product.id}" class="card-link">View Details <i class="fas fa-arrow-right"></i></a>
                 </div>
-            </div>
-        `;
+            </div>`;
         featuredContent.appendChild(card);
     });
 
@@ -197,7 +193,7 @@ function renderProducts(productsToRender) {
 function renderPagination(totalPages) {
     const paginationContainer = document.getElementById('pagination-controls');
     if (!paginationContainer || totalPages <= 1) return; // Don't render if only one page
-
+  
     // Previous button
     const prevButton = document.createElement('button');
     prevButton.innerHTML = '<i class="fas fa-chevron-left"></i>';
@@ -208,7 +204,7 @@ function renderPagination(totalPages) {
             filterAndSearchProducts();
         }
     });
-    paginationContainer.appendChild(prevButton);
+  
 
     // Page number buttons (simplified for brevity, could add ellipsis for many pages)
     for (let i = 1; i <= totalPages; i++) {
@@ -221,10 +217,10 @@ function renderPagination(totalPages) {
             currentPage = i;
             filterAndSearchProducts();
         });
-        paginationContainer.appendChild(pageButton);
-    }
 
-    // Next button
+    }
+  
+  
     const nextButton = document.createElement('button');
     nextButton.innerHTML = '<i class="fas fa-chevron-right"></i>';
     nextButton.disabled = currentPage === totalPages;
@@ -233,7 +229,7 @@ function renderPagination(totalPages) {
             currentPage++;
             filterAndSearchProducts();
         }
-    });
+    })
     paginationContainer.appendChild(nextButton);
 }
 
@@ -255,9 +251,6 @@ function filterAndSearchProducts() {
             p.category.toLowerCase().includes(lowerCaseSearch)
         );
     }
-    
-    // Reset to page 1 when filter/search changes, unless it's just a page change
-    // This logic is handled implicitly by calling renderProducts which uses the current currentPage
 
     renderProducts(filtered);
 }
@@ -278,13 +271,12 @@ document.addEventListener('DOMContentLoaded', () => {
             // Insert after the featured content grid
             featuredContent.parentNode.insertBefore(paginationDiv, featuredContent.nextSibling);
         }
-    }
+    } 
 
     filterButtons.forEach(button => {
         button.addEventListener('click', () => {
-            // Don't process clicks on the submit button
-            if (button.getAttribute('onclick')) return; 
-
+            if (button.getAttribute('onclick')) return; //Don't process clicks on the submit button
+          
             filterButtons.forEach(btn => btn.classList.remove('active'));
             button.classList.add('active');
             currentFilter = button.dataset.category;
@@ -294,7 +286,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // Event listener for search input
-    if (searchInput) {
+    if (searchInput) {   
         searchInput.addEventListener('input', (e) => {
             currentSearchTerm = e.target.value;
             currentPage = 1; // Reset to page 1 on search change
@@ -306,7 +298,7 @@ document.addEventListener('DOMContentLoaded', () => {
     fetchProducts()
         .then(data => {
             if (data && data.products) {
-                allProducts = data.products;
+                allProducts = data.products; 
                 currentPage = 1; // Ensure starting on page 1
                 filterAndSearchProducts(); // Initial render
             } else {
@@ -322,86 +314,77 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // --- END OF NEW CODE ---
 
-// Theme Toggle Functionality
 function setupThemeToggle() {
     const themeToggle = document.getElementById('theme-toggle');
     if (!themeToggle) return;
-
-    // ... existing theme toggle code ...
 }
 
-// 设置返回顶部按钮
+
 function setupScrollToTop() {
-    // 创建返回顶部按钮
-    const backToTopBtn = document.createElement('div');
-    backToTopBtn.classList.add('back-to-top');
-    backToTopBtn.innerHTML = '<i class="fas fa-arrow-up"></i>';
-    backToTopBtn.setAttribute('title', '返回顶部');
-    document.body.appendChild(backToTopBtn);
-    
-    // 监听滚动事件，控制按钮显示/隐藏
-    window.addEventListener('scroll', function() {
-        if (window.pageYOffset > 300) {
-            backToTopBtn.classList.add('visible');
-        } else {
-            backToTopBtn.classList.remove('visible');
-        }
+    let backToTopButton = document.querySelector('.back-to-top');
+    if (!backToTopButton) {
+        backToTopButton = document.createElement('div');
+        backToTopButton.classList.add('back-to-top');
+        backToTopButton.innerHTML = '<i class="fas fa-arrow-up"></i>';
+        backToTopButton.setAttribute('title', 'Back to Top');
+        document.body.appendChild(backToTopButton);
+        const style = document.createElement('style');
+        style.textContent = `
+            .back-to-top {
+                position: fixed;
+                right: 20px;
+                bottom: 20px;
+                width: 40px;
+                height: 40px;
+                background: var(--primary-color);
+                color: white;
+                border-radius: 50%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                cursor: pointer;
+                opacity: 0;
+                transform: translateY(20px);
+                transition: all 0.3s ease;
+                z-index: 999;
+                box-shadow: 0 4px 10px rgba(80, 72, 229, 0.3);
+            }
+            
+            .back-to-top.visible {
+                opacity: 1;
+                transform: translateY(0);
+            }
+            
+            .back-to-top:hover {
+                transform: translateY(-5px);
+                background: var(--primary-dark);
+                box-shadow: 0 6px 15px rgba(80, 72, 229, 0.4);
+            }
+            
+            @media (max-width: 768px) {
+                .back-to-top {
+                    right: 15px;
+                    bottom: 15px;
+                    width: 35px;
+                    height: 35px;
+                }
+            }
+        `;
+        document.head.appendChild(style);
+    }
+  
+    window.addEventListener('scroll', () => {
+        backToTopButton.classList.toggle('visible', window.pageYOffset > 300);
     });
-    
-    // 点击返回顶部
-    backToTopBtn.addEventListener('click', function() {
-        // 平滑滚动到顶部
+  
+    backToTopButton.addEventListener('click', () => {
         window.scrollTo({
             top: 0,
             behavior: 'smooth'
         });
     });
-    
-    // 添加必要的CSS
-    const style = document.createElement('style');
-    style.textContent = `
-        .back-to-top {
-            position: fixed;
-            right: 20px;
-            bottom: 20px;
-            width: 40px;
-            height: 40px;
-            background: var(--primary-color);
-            color: white;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            opacity: 0;
-            transform: translateY(20px);
-            transition: all 0.3s ease;
-            z-index: 999;
-            box-shadow: 0 4px 10px rgba(80, 72, 229, 0.3);
-        }
-        
-        .back-to-top.visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
-        
-        .back-to-top:hover {
-            transform: translateY(-5px);
-            background: var(--primary-dark);
-            box-shadow: 0 6px 15px rgba(80, 72, 229, 0.4);
-        }
-        
-        @media (max-width: 768px) {
-            .back-to-top {
-                right: 15px;
-                bottom: 15px;
-                width: 35px;
-                height: 35px;
-            }
-        }
-    `;
-    document.head.appendChild(style);
 }
+
 
 // 改进的侧边栏切换功能
 function setupSidebarToggle() {
@@ -414,7 +397,7 @@ function setupSidebarToggle() {
         overlay = document.createElement('div');
         overlay.id = 'overlay';
         overlay.className = 'overlay';
-        document.body.appendChild(overlay);
+
     }
     
     // 侧边栏切换
@@ -535,11 +518,7 @@ function initApp() {
     // 设置主题切换
     setupThemeToggle();
     
-    // 初始化WebSocket (如果需要)
-    if (typeof initWebSocket === 'function') {
-        initWebSocket();
-    }
+
 }
 
-// 保留原有的事件监听器
-document.addEventListener('DOMContentLoaded', initApp);
+document.addEventListener('DOMContentLoaded', initApp); 

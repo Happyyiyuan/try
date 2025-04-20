@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="en">
 
 <head>
     <meta charset="UTF-8">
@@ -11,7 +11,7 @@
     <link rel="icon" href="https://cdn-icons-png.flaticon.com/512/2103/2103652.png" type="image/png">
     <script src="../public/js/main.js" defer></script>
     <script src="../public/js/auth.js" defer></script>
-    <style>
+    <style>/* Container for the entire authentication form */
         .auth-container {
             max-width: 550px;
             margin: 40px auto;
@@ -23,14 +23,15 @@
             overflow: hidden;
             animation: fadeIn 0.6s ease-out;
         }
-        
+
         .auth-container::before {
             content: '';
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
-            height: 6px;
+            height: 5px;
+            /* Adds a gradient line at the top for visual emphasis */
             background: linear-gradient(to right, var(--gradient-start), var(--gradient-end));
         }
         
@@ -44,7 +45,7 @@
             margin-bottom: var(--spacing-xl);
             position: relative;
         }
-
+        /* Styles the icon in the header with a gradient */
         .auth-header i {
             font-size: 52px;
             background: linear-gradient(to right, var(--gradient-start), var(--gradient-end));
@@ -54,7 +55,7 @@
             display: inline-block;
             animation: float 3s ease-in-out infinite;
         }
-        
+        /* Adds a subtle floating animation to the header icon */
         @keyframes float {
             0% { transform: translateY(0px); }
             50% { transform: translateY(-8px); }
@@ -69,7 +70,7 @@
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
-        
+        /* Styles the paragraph text within the header */
         .auth-header p {
             color: var(--text-secondary);
             font-size: 16px;
@@ -77,29 +78,30 @@
             margin: 0 auto;
         }
 
-        .form-group {
-            margin-bottom: var(--spacing-lg);
-        }
+        /* General styles for form groups (label + input) */
+    .form-group {
+        margin-bottom: var(--spacing-lg);
+    }
 
-        .form-group label {
-            display: block;
-            margin-bottom: var(--spacing-sm);
-            font-weight: var(--font-weight-medium);
-            color: var(--text-color);
-        }
+    /* Styles for labels within form groups */
+    .form-group label {
+        display: block;
+        margin-bottom: var(--spacing-sm);
+        font-weight: var(--font-weight-medium);
+        color: var(--text-color);
+    }
 
-        .form-control {
-            width: 100%;
-            padding: 14px 16px;
-            border: 2px solid var(--border-color);
-            border-radius: var(--border-radius-md);
-            background: var(--bg-color);
-            color: var(--text-color);
-            font-size: 15px;
-            transition: var(--transition-smooth);
-            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.05);
-        }
-
+    /* Base styles for form input fields */
+    .form-control {
+        width: 100%;
+        padding: 14px 16px;
+        border: 2px solid var(--border-color);
+        border-radius: var(--border-radius-md);
+        background: var(--bg-color);
+        color: var(--text-color);
+        font-size: 16px;
+        transition: border-color 0.3s ease, box-shadow 0.3s ease; /* Smooth transition for border and shadow */
+    }
         .form-control:hover {
             border-color: rgba(99, 102, 241, 0.4);
         }
@@ -107,11 +109,11 @@
         .form-control:focus {
             border-color: var(--primary-color);
             outline: none;
-            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2), inset 0 2px 4px rgba(0, 0, 0, 0.05);
-            transform: translateY(-1px);
+            box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.2);
         }
 
-        .btn-primary {
+        /* Styles for the primary button (e.g., submit button) */
+    .btn-primary {
             width: 100%;
             background: linear-gradient(to right, var(--gradient-start), var(--gradient-end));
             color: white;
@@ -129,7 +131,7 @@
             overflow: hidden;
             z-index: 1;
             letter-spacing: 0.5px;
-        }
+    }
 
         .btn-primary::before {
             content: '';
@@ -156,7 +158,7 @@
             transform: translateY(-1px);
         }
 
-        .btn-primary i {
+    .btn-primary i {
             margin-right: 10px;
             font-size: 18px;
         }
@@ -169,7 +171,7 @@
             font-size: 15px;
             border-top: 1px solid var(--border-color);
             position: relative;
-        }
+    }
 
         .auth-footer a {
             color: var(--primary-color);
@@ -179,7 +181,7 @@
             padding: 2px 4px;
             transition: var(--transition-base);
         }
-
+        /* Underline effect for links in the footer */
         .auth-footer a::after {
             content: '';
             position: absolute;
@@ -191,7 +193,7 @@
             transform: scaleX(0);
             transform-origin: right;
             transition: transform 0.3s ease;
-        }
+    }
 
         .auth-footer a:hover {
             color: var(--secondary-color);
@@ -200,7 +202,7 @@
         .auth-footer a:hover::after {
             transform: scaleX(1);
             transform-origin: left;
-        }
+    }
         
         /* 响应式设计增强 */
         @media (max-width: 768px) {
@@ -208,7 +210,7 @@
                 margin: 20px auto;
                 padding: var(--spacing-lg);
                 width: 90%;
-            }
+        }
             
             .avatar-selection {
                 gap: 8px;
@@ -223,7 +225,7 @@
                 flex-direction: column;
                 gap: var(--spacing-sm);
             }
-        }
+    }
         
         @media (max-width: 480px) {
             .auth-header i {
@@ -237,16 +239,16 @@
             .form-group label {
                 font-size: 14px;
             }
-            
-            .form-control {
-                padding: 12px 14px;
-                font-size: 14px;
-            }
-            
+
+        .form-control {
+            padding: 12px 14px;
+            font-size: 15px;
+        }
+
             .btn-primary {
                 padding: 14px 20px;
             }
-        }
+    }
 
         .password-toggle {
             position: relative;
@@ -263,7 +265,7 @@
             border-radius: 50%;
             transition: var(--transition-base);
         }
-        
+        /* Styles for the eye icon hover state */
         .password-toggle i:hover {
             background: rgba(99, 102, 241, 0.1);
             color: var(--primary-color);
@@ -274,39 +276,36 @@
             margin-top: 8px;
             border-radius: 2px;
             background: var(--border-color);
-            position: relative;
             overflow: hidden;
-            display: none;
-        }
-        
-        .password-strength-bar {
-            height: 100%;
-            width: 0;
-            transition: width 0.3s ease;
-        }
-        
-        .strength-weak .password-strength-bar {
-            width: 33%;
-            background: var(--accent-color);
-        }
-        
-        .strength-medium .password-strength-bar {
-            width: 66%;
-            background: var(--warning-color);
-        }
-        
-        .strength-strong .password-strength-bar {
-            width: 100%;
-            background: var(--success-color);
-        }
+    }
 
-        .avatar-selection {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 12px;
-            margin-top: var(--spacing-sm);
-            justify-content: center;
-        }
+    /* Individual strength levels */
+    .password-strength-bar {
+        height: 100%;
+        width: 0;
+        transition: width 0.3s ease;
+    }
+    .strength-weak .password-strength-bar {
+        width: 33%;
+        background: var(--error-color); /* Or any color indicating weakness */
+    }
+    .strength-medium .password-strength-bar {
+        width: 66%;
+        background: var(--warning-color);
+    }
+    .strength-strong .password-strength-bar {
+        width: 100%;
+        background: var(--success-color);
+    }
+
+    /* Avatar selection area */
+    .avatar-selection {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        margin-top: var(--spacing-sm);
+        justify-content: center;
+    }
 
         .avatar-option {
             width: 60px;
@@ -317,7 +316,7 @@
             transition: var(--transition-bounce);
             box-shadow: var(--shadow-sm);
             object-fit: cover;
-        }
+    }
 
         .avatar-option:hover {
             transform: scale(1.15);
@@ -329,7 +328,7 @@
             box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.3), var(--shadow-md);
             animation: pulse 1.5s infinite;
         }
-        
+        /* Subtle pulsing animation for the selected avatar */
         @keyframes pulse {
             0% {
                 box-shadow: 0 0 0 0 rgba(99, 102, 241, 0.5), var(--shadow-md);
@@ -340,7 +339,7 @@
             100% {
                 box-shadow: 0 0 0 0 rgba(99, 102, 241, 0), var(--shadow-md);
             }
-        }
+    }
         
         .avatar-type-selection {
             display: flex;
@@ -350,7 +349,7 @@
             background: var(--bg-color);
             padding: 12px;
             border-radius: var(--border-radius-md);
-        }
+    }
         
         .radio-option {
             display: flex;
@@ -360,7 +359,7 @@
             border-radius: var(--border-radius-md);
             transition: var(--transition-base);
         }
-        
+        /* Subtle background on hover */
         .radio-option:hover {
             background: rgba(99, 102, 241, 0.05);
         }
@@ -376,7 +375,7 @@
             transition: var(--transition-base);
             position: relative;
         }
-        
+        /* Visual cue for the selected radio button */
         .radio-option input[type="radio"]:checked {
             border-color: var(--primary-color);
             background: white;
@@ -393,7 +392,7 @@
             border-radius: 50%;
             background: var(--primary-color);
         }
-        
+        /* Label styling within radio options */
         .radio-option label {
             margin-bottom: 0;
             cursor: pointer;
@@ -410,7 +409,7 @@
             transition: var(--transition-bounce);
             box-shadow: var(--shadow-md);
             border: 3px solid var(--primary-color);
-        }
+    }
         
         .file-upload-container {
             margin-bottom: var(--spacing-md);
@@ -422,18 +421,18 @@
             background: var(--bg-color);
             border-radius: var(--border-radius-md);
             cursor: pointer;
-        }
-        
-        .upload-hint {
-            font-size: 12px;
-            color: var(--text-secondary);
-            margin-top: var(--spacing-xs);
-            text-align: center;
-            background: rgba(99, 102, 241, 0.05);
-            padding: 8px;
-            border-radius: var(--border-radius-md);
-            border-left: 3px solid var(--primary-color);
-        }
+    }
+
+    .upload-hint {
+        font-size: 14px;
+        color: var(--text-secondary);
+        margin-top: var(--spacing-xs);
+        text-align: center;
+        background: rgba(99, 102, 241, 0.05);
+        padding: 10px;
+        border-radius: var(--border-radius-md);
+        border-left: 3px solid var(--primary-color);
+    }
 
         .error-message {
             color: var(--accent-color);
@@ -446,14 +445,14 @@
             border-left: 3px solid var(--accent-color);
             animation: shake 0.5s ease-in-out;
         }
-        
+        /* Subtle shake animation for error messages */
         @keyframes shake {
             0%, 100% { transform: translateX(0); }
             10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
             20%, 40%, 60%, 80% { transform: translateX(5px); }
-        }
+    }
 
-        .success-message {
+    .success-message {
             background: rgba(16, 185, 129, 0.1);
             color: var(--success-color);
             padding: var(--spacing-md);
@@ -463,10 +462,10 @@
             border-left: 3px solid var(--success-color);
             font-weight: var(--font-weight-medium);
             animation: slideDown 0.5s ease-out;
-        }
+    }
         
         .success-message i {
-            margin-right: 8px;
+            margin-right: var(--spacing-sm);
         }
         
         @keyframes slideDown {
@@ -520,36 +519,36 @@
                     <i class="fas fa-check-circle"></i> 注册成功！正在跳转到登录页面...
                 </div>
                 
-                <form id="register-form">
-                    <div class="form-group">
-                        <label for="username">用户名</label>
-                        <input type="text" id="username" class="form-control" placeholder="请输入用户名" required>
-                        <div id="username-error" class="error-message">用户名已被占用</div>
+            <form id="register-form">
+                <div class="form-group">
+                    <label for="username">用户名</label>
+                    <input type="text" id="username" class="form-control" placeholder="请输入用户名" required>
+                    <div id="username-error" class="error-message">用户名已被占用</div>
+                </div>
+
+                <div class="form-group">
+                    <label for="email">电子邮箱</label>
+                    <input type="email" id="email" class="form-control" placeholder="请输入电子邮箱" required>
+                    <div id="email-error" class="error-message">邮箱格式不正确</div>
+                </div>
+
+                <div class="form-group">
+                    <label for="password">密码</label>
+                    <div class="password-toggle">
+                        <input type="password" id="password" class="form-control" placeholder="请设置密码" required>
+                        <i class="far fa-eye-slash" id="password-toggle"></i>
                     </div>
-                    
-                    <div class="form-group">
-                        <label for="email">电子邮箱</label>
-                        <input type="email" id="email" class="form-control" placeholder="请输入电子邮箱" required>
-                        <div id="email-error" class="error-message">邮箱格式不正确</div>
+                    <div id="password-error" class="error-message">密码至少需要6个字符</div>
+                </div>
+
+                <div class="form-group">
+                    <label for="confirm-password">确认密码</label>
+                    <div class="password-toggle">
+                        <input type="password" id="confirm-password" class="form-control" placeholder="请再次输入密码" required>
+                        <i class="far fa-eye-slash" id="confirm-password-toggle"></i>
                     </div>
-                    
-                    <div class="form-group">
-                        <label for="password">密码</label>
-                        <div class="password-toggle">
-                            <input type="password" id="password" class="form-control" placeholder="请设置密码" required>
-                            <i class="far fa-eye-slash" id="password-toggle"></i>
-                        </div>
-                        <div id="password-error" class="error-message">密码至少需要6个字符</div>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="confirm-password">确认密码</label>
-                        <div class="password-toggle">
-                            <input type="password" id="confirm-password" class="form-control" placeholder="请再次输入密码" required>
-                            <i class="far fa-eye-slash" id="confirm-password-toggle"></i>
-                        </div>
-                        <div id="confirm-password-error" class="error-message">两次输入的密码不一致</div>
-                    </div>
+                    <div id="confirm-password-error" class="error-message">两次输入的密码不一致</div>
+                </div>
                     
                     <div class="form-group">
                         <label>选择头像</label>
@@ -575,13 +574,13 @@
                         
                         <div id="custom-avatar-container" style="display: none;">
                             <div class="custom-avatar-preview">
-                                <img id="current-avatar-preview" src="" alt="当前头像" style="display: none; width: 100px; height: 100px; border-radius: 50%; object-fit: cover; margin-bottom: 10px;">
+                        <img id="current-avatar-preview" src="" alt="当前头像" style="display: none; width: 100px; height: 100px; border-radius: 50%; object-fit: cover; margin-bottom: 10px;">
                             </div>
                             <div class="file-upload-container">
-                                <input type="file" id="avatar-upload" accept="image/*" class="form-control">
-                                <p class="upload-hint">支持JPG、PNG格式，文件大小不超过2MB</p>
+                        <input type="file" id="avatar-upload" accept="image/*" class="form-control">
+                        <p class="upload-hint">支持JPG、PNG格式，文件大小不超过2MB</p>
                             </div>
-                        </div>
+                    </div>
                         
                         <input type="hidden" id="selected-avatar" value="men/32">
                         <input type="hidden" id="custom-avatar-data" value="">
@@ -591,7 +590,7 @@
                         <i class="fas fa-user-plus"></i> 创建账号
                     </button>
                 </form>
-                
+
                 <div class="auth-footer">
                     已有账号？<a href="login.html">立即登录</a>
                 </div>

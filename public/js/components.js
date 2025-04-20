@@ -1,22 +1,19 @@
 /**
- * UI组件库 - 提供可重用的UI元素
- * 依赖: config.js
+ * UI Component Library - Provides reusable UI elements
  */
 
-// 确保文档加载完成
-document.addEventListener('DOMContentLoaded', function() {
-    console.log('组件库已加载');
-    initComponents();
-});
+document.addEventListener('DOMContentLoaded', initializeComponents);
 
-// 通用组件初始化
-function initComponents() {
-    setupMobileNavigation();
-    setupThemeToggle();
-    setupNotifications();
-    setupModalHandlers();
-    setupTooltips();
-    setupImageLazyLoading();
+/**
+ * Initializes all UI components.
+ */
+function initializeComponents() {
+    setupMobileNavigationComponent();
+    setupThemeToggleComponent();
+    setupNotificationsComponent();
+    setupModalHandlersComponent();
+    setupTooltipsComponent();
+    setupImageLazyLoadingComponent();
 }
 
 // 响应式导航
@@ -87,7 +84,7 @@ function setupThemeToggle() {
 }
 
 // 通知系统
-function setupNotifications() {
+function setupNotificationsComponent() {
     if (!window.UI) {
         window.UI = {};
     }
@@ -146,7 +143,7 @@ function setupNotifications() {
 }
 
 // 模态框处理
-function setupModalHandlers() {
+function setupModalHandlersComponent() {
     if (!window.UI) {
         window.UI = {};
     }
@@ -191,7 +188,7 @@ function setupModalHandlers() {
 }
 
 // 提示工具
-function setupTooltips() {
+function setupTooltipsComponent() {
     // 基于data-tooltip属性创建提示
     document.querySelectorAll('[data-tooltip]').forEach(element => {
         element.addEventListener('mouseenter', function(e) {
@@ -234,7 +231,7 @@ function setupTooltips() {
 }
 
 // 图片懒加载
-function setupImageLazyLoading() {
+function setupImageLazyLoadingComponent() {
     // 检查浏览器是否支持 Intersection Observer API
     if ('IntersectionObserver' in window) {
         const imageObserver = new IntersectionObserver((entries, observer) => {
@@ -348,4 +345,4 @@ if (!window.UI) {
     window.UI = {};
 }
 
-window.UI.initComponents = initComponents; 
+window.UI.initializeComponents = initializeComponents;

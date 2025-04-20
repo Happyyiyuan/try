@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -11,15 +12,17 @@
     <link rel="icon" href="https://cdn-icons-png.flaticon.com/512/2103/2103652.png" type="image/png">
     <script src="../public/js/config.js"></script>
     <script src="../public/js/main.js" defer></script>
-    <script src="../public/js/sidebar-loader.js" defer></script>
+    <script src="../public/js/sidebar-loader.js" defer></script> <!-- Sidebar loading -->
     <meta name="description" content="AI技术知识库 - 了解人工智能最新发展、应用案例和技术趋势">
     <meta name="keywords" content="人工智能,AI,深度学习,机器学习,神经网络,自然语言处理,计算机视觉">
     <meta name="author" content="AI科技库团队">
-    <script src="../public/js/main.js" defer></script>
-    <script src="../public/js/seo-meta-tags.js" defer></script>
-    <script src="../public/js/analytics.js" defer></script>
+    <script src="../public/js/seo-meta-tags.js" defer></script> <!-- SEO Meta Tags -->
+    <script src="../public/js/analytics.js" defer></script> <!-- Analytics -->
     <style>
+        /* AI Grid */
+        
         .ai-grid {
+            /* Responsive grid layout for AI cards */
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
             gap: 24px;
@@ -27,6 +30,7 @@
         }
         
         .ai-card {
+            /* Styling for individual AI cards */
             position: relative;
             border-radius: var(--border-radius-lg);
             overflow: hidden;
@@ -37,6 +41,7 @@
         }
         
         .ai-card:hover {
+            /* Hover effect for AI cards */
             transform: translateY(-8px);
             box-shadow: var(--shadow-lg);
             border-color: var(--primary-color);
@@ -50,6 +55,7 @@
         }
         
         .ai-card-image::before {
+            /* Gradient overlay on card image */
             content: '';
             position: absolute;
             top: 0;
@@ -60,6 +66,7 @@
         }
         
         .ai-card-badge {
+            /* Badge on AI card */
             position: absolute;
             top: 16px;
             right: 16px;
@@ -74,6 +81,7 @@
         }
         
         .ai-card-content {
+            /* Content area within AI card */
             padding: 24px;
         }
         
@@ -124,6 +132,7 @@
         }
         
         .ai-timeline {
+            /* Styling for the AI timeline */
             position: relative;
             margin: 40px 0;
             padding-left: 30px;
@@ -141,6 +150,7 @@
         }
         
         .ai-timeline-item {
+            /* Styling for individual timeline items */
             position: relative;
             margin-bottom: 30px;
             padding: 20px;
@@ -158,6 +168,7 @@
         }
         
         .ai-timeline-item::before {
+            /* Circle indicator on timeline */
             content: '';
             position: absolute;
             left: -34px;
@@ -196,7 +207,7 @@
 </head>
 
 <body>
-    <div class="container">
+    <div class="container"> <!-- Main content container -->
         <aside class="sidebar">
             <div class="logo-container">
                 <div class="logo-text">
@@ -207,7 +218,7 @@
                     <i class="fas fa-moon"></i>
                 </button>
             </div>
-            
+            <!-- Category Navigation -->
             <div class="category-nav">
                 <h3 class="section-title">分类导航</h3>
                 <button data-href="../index.html"><i class="fas fa-th-large"></i> 全部内容</button>
@@ -218,7 +229,7 @@
                 <button data-href="ml.html"><i class="fas fa-robot"></i> 机器学习</button>
                 <button data-href="deep-learning.html"><i class="fas fa-brain"></i> 深度学习</button>
             </div>
-            
+            <!-- Tags Container -->
             <div class="tags-container">
                 <h3 class="section-title">热门标签</h3>
                 <div class="tags-wrapper">
@@ -231,7 +242,7 @@
                 </div>
             </div>
         </aside>
-        
+        <!-- Main Content Area -->
         <main class="main-content">
             <div class="header-section">
                 <div class="header-content">
@@ -245,7 +256,7 @@
                     </div>
                 </div>
             </div>
-            
+            <!-- Featured AI Technologies Section -->
             <section class="featured-section">
                 <h2 class="section-title">
                     <i class="fas fa-star"></i> 热门AI技术
@@ -299,7 +310,7 @@
                     </div>
                 </div>
             </section>
-            
+            <!-- AI History Timeline Section -->
             <section class="ai-history-section">
                 <h2 class="section-title">
                     <i class="fas fa-history"></i> AI发展历程
@@ -338,7 +349,7 @@
                     </div>
                 </div>
             </section>
-            
+            <!-- AI Applications Section -->
             <section class="applications-section">
                 <h2 class="section-title">
                     <i class="fas fa-rocket"></i> AI应用领域
@@ -375,12 +386,12 @@
                 </div>
             </section>
         </main>
-    </div>
-    
+    </div> <!-- End of container -->
+    <!-- JavaScript for Scroll Animation -->
     <script>
-        // 页面滚动动画效果
         document.addEventListener('DOMContentLoaded', () => {
             const animateOnScroll = () => {
+                // Select elements for animation (AI cards and timeline items)
                 const elements = document.querySelectorAll('.ai-card, .ai-timeline-item');
                 
                 elements.forEach(element => {
@@ -392,14 +403,12 @@
                     }
                 });
             };
-            
-            // 初始检查
+            // Initial animation check
             animateOnScroll();
-            
-            // 滚动时检查
+            // Animation check on scroll
             window.addEventListener('scroll', animateOnScroll);
         });
     </script>
-    <script src="../public/js/sidebar-unifier.js" defer></script>
+    <script src="../public/js/sidebar-unifier.js" defer></script> <!-- Unifies sidebar content -->
 </body>
 </html>

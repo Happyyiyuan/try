@@ -1,15 +1,15 @@
 <?php
+
 /**
- * 数据库连接和操作类
- * 
- * 使用单例模式实现的数据库操作类，提供了常用的CRUD操作方法
- * 并实现了预处理语句以防止SQL注入
+ * Database connection and operation class.
+ * Implemented as a singleton pattern, providing common CRUD operation methods
+ * and using prepared statements to prevent SQL injection.
  */
 class Database {
-    /** @var Database|null 单例实例 */
+    /** @var Database|null Singleton instance */
     private static $instance = null;
-    
-    /** @var PDO 数据库连接对象 */
+
+    /** @var PDO Database connection object */
     private $connection;
     
     /** @var array 数据库配置信息 */
@@ -17,7 +17,7 @@ class Database {
 
     /**
      * 私有构造函数，防止外部直接实例化
-     */
+     */ 
     private function __construct() {
         $this->config = require __DIR__ . '/../config/database.php';
         $this->connect();
@@ -26,7 +26,7 @@ class Database {
     /**
      * 建立数据库连接
      * 
-     * @throws Exception 当数据库连接失败时抛出异常
+     * @throws Exception when the database connection fails
      */
     private function connect() {
         try {
@@ -42,8 +42,7 @@ class Database {
                 PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
                 PDO::ATTR_EMULATE_PREPARES => false,
                 PDO::ATTR_PERSISTENT => true, // 使用持久连接提高性能
-            ];
-
+            ]; 
             $this->connection = new PDO(
                 $dsn,
                 $this->config['username'],
@@ -51,7 +50,7 @@ class Database {
                 $options
             );
             
-            // 设置字符集
+            // Set character set
             $this->connection->exec("SET NAMES {$this->config['charset']}");
         } catch (PDOException $e) {
             error_log('数据库连接错误: ' . $e->getMessage());
@@ -61,7 +60,7 @@ class Database {
 
     /**
      * 获取数据库实例（单例模式）
-     * 
+     *
      * @return Database 返回数据库实例
      */
     public static function getInstance() {
@@ -73,12 +72,12 @@ class Database {
     
     /**
      * 获取原始PDO连接对象
-     * 
+     *
      * @return PDO 返回PDO连接对象
      */
     public function getConnection() {
         return $this->connection;
-    }
+    } 
 
     /**
      * 执行SQL查询
@@ -86,7 +85,7 @@ class Database {
      * @param string $sql SQL语句
      * @param array $params 预处理参数数组
      * @return PDOStatement 返回PDOStatement对象
-     * @throws Exception 当查询执行失败时抛出异常
+     * @throws Exception when the query execution fails
      */
     public function query($sql, $params = []) {
         try {
@@ -101,7 +100,7 @@ class Database {
 
     /**
      * 获取单行结果
-     * 
+     *
      * @param string $sql SQL语句
      * @param array $params 预处理参数数组
      * @return array|false 返回结果数组或false
@@ -112,7 +111,7 @@ class Database {
 
     /**
      * 获取多行结果
-     * 
+     *
      * @param string $sql SQL语句
      * @param array $params 预处理参数数组
      * @return array 返回结果数组
@@ -122,25 +121,26 @@ class Database {
     }
     
     /**
-     * 获取单个值
-     * 
-     * @param string $sql SQL语句
-     * @param array $params 预处理参数数组
-     * @return mixed 返回查询的第一行第一列的值
+     * Fetch a single value from the database.
+     *
+     * @param string $sql The SQL query.
+     * @param array $params The prepared statement parameters.
+     * @param int $column The column index to fetch (default is 0).
+     * @return mixed The value of the first column of the first row.
      */
     public function fetchColumn($sql, $params = [], $column = 0) {
         return $this->query($sql, $params)->fetchColumn($column);
     }
 
     /**
-     * 插入数据
-     * 
-     * @param string $table 表名
-     * @param array $data 要插入的数据关联数组
-     * @return string 返回最后插入的ID
+     * Insert data into a table.
+     *
+     * @param string $table The table name.
+     * @param array $data An associative array of data to insert.
+     * @return string The ID of the last inserted row.
      */
     public function insert($table, $data) {
-        if (empty($data)) {
+        if (empty($data)) { 
             throw new Exception('插入数据不能为空');
         }
         
@@ -159,11 +159,11 @@ class Database {
     }
 
     /**
-     * 更新数据
-     * 
-     * @param string $table 表名
-     * @param array $data 要更新的数据关联数组
-     * @param string $where WHERE条件语句
+     * Update data in a table.
+     *
+     * @param string $table The table name.
+     * @param array $data An associative array of data to update.
+     * @param string $where The WHERE clause.
      * @param array $whereParams WHERE条件参数数组
      * @return int 返回受影响的行数
      */
@@ -188,10 +188,10 @@ class Database {
     }
 
     /**
-     * 删除数据
-     * 
-     * @param string $table 表名
-     * @param string $where WHERE条件语句
+     * Delete data from a table.
+     *
+     * @param string $table The table name.
+     * @param string $where The WHERE clause.
      * @param array $params WHERE条件参数数组
      * @return int 返回受影响的行数
      */
@@ -205,27 +205,27 @@ class Database {
     }
     
     /**
-     * 开始事务
-     * 
-     * @return bool 成功返回true
+     * Start a transaction.
+     *
+     * @return bool True on success, false on failure.
      */
     public function beginTransaction() {
         return $this->connection->beginTransaction();
     }
     
     /**
-     * 提交事务
-     * 
-     * @return bool 成功返回true
+     * Commit the current transaction.
+     *
+     * @return bool True on success, false on failure.
      */
     public function commit() {
         return $this->connection->commit();
     }
     
     /**
-     * 回滚事务
-     * 
-     * @return bool 成功返回true
+     * Roll back the current transaction.
+     *
+     * @return bool True on success, false on failure.
      */
     public function rollBack() {
         return $this->connection->rollBack();
@@ -234,7 +234,7 @@ class Database {
     /**
      * 检查是否在事务中
      * 
-     * @return bool 如果在事务中返回true
+     * @return bool True if currently in a transaction, false otherwise.
      */
     public function inTransaction() {
         return $this->connection->inTransaction();

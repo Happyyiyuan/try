@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
-
+    
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -24,25 +24,30 @@
             box-shadow: var(--shadow-md);
             transition: var(--transition-base);
         }
-
-        .specs-table th, .specs-table td {
+        
+        .specs-table th,
+        .specs-table td {
             padding: var(--spacing-md);
             text-align: left;
             border-bottom: 1px solid var(--border-color);
         }
-
+        
         .specs-table th {
             background: linear-gradient(135deg, var(--gradient-start) 0%, var(--gradient-end) 100%);
             color: white;
             font-weight: var(--font-weight-semibold);
         }
         
-        .specs-table tr:last-child td {
-            border-bottom: none;
-        }
+        .specs-table tr:last-child td { border-bottom: none; }
         
-        .specs-table tr:hover td {
-            background-color: rgba(99, 102, 241, 0.05);
+        .specs-table tr:hover td { background-color: rgba(99, 102, 241, 0.05); }
+        
+        /* 添加卡片悬停效果 */
+        .knowledge-card { transition: var(--transition-smooth); }
+        
+        .knowledge-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-lg);
         }
         
         /* 添加响应式表格样式 */
@@ -51,16 +56,6 @@
                 display: block;
                 overflow-x: auto;
             }
-        }
-        
-        /* 添加卡片悬停效果 */
-        .knowledge-card {
-            transition: var(--transition-smooth);
-        }
-        
-        .knowledge-card:hover {
-            transform: translateY(-5px);
-            box-shadow: var(--shadow-lg);
         }
     </style>
     <link rel="stylesheet" href="/public/css/sidebar-enhancements.css">
@@ -71,7 +66,7 @@
         <aside class="sidebar">
             <div class="logo-container">
                 <div class="logo-text">
-                    <i class="fas fa-microchip"></i>
+                    <i class="fas fa-mobile-alt"></i>
                     <h2>AI科技库</h2>
                 </div>
                 <button id="theme-toggle">
@@ -80,18 +75,18 @@
             </div>
             
             <div class="category-nav">
-                <h3 class="section-title">分类导航</h3>
-                <button data-href="../index.html""><i class="fas fa-th-large"></i> 全部内容</button>
+                <h3 class="nav-title">分类导航</h3>
+                <button data-href="../index.html"><i class="fas fa-th-large"></i> 全部内容</button>
                 <button class="active"><i class="fas fa-mobile-alt"></i> 手机科技</button>
-                <button data-href="/computer.html""><i class="fas fa-laptop"></i> 电脑配件</button>
-                <button data-href="/digital.html""><i class="fas fa-headphones"></i> 数码产品</button>
+                <button data-href="/computer.html"><i class="fas fa-laptop"></i> 电脑配件</button>
+                <button data-href="/digital.html"><i class="fas fa-headphones"></i> 数码产品</button>
                 <button data-href="/ai.html""><i class="fas fa-microchip"></i> AI技术</button>
                 <button data-href="/ml.html""><i class="fas fa-robot"></i> 机器学习</button>
                 <button data-href="/deep-learning.html""><i class="fas fa-brain"></i> 深度学习</button>
             </div>
             
             <div class="tags-container">
-                <h3 class="section-title">热门标签</h3>
+                <h3 class="nav-title">热门标签</h3>
                 <div class="tags-wrapper">
                     <span class="tag">#人工智能</span>
                     <span class="tag">#深度学习</span>
@@ -148,7 +143,7 @@
         // 加载知识库数据
         async function loadPhoneData() {
             try {
-                // 确保config.js已加载并初始化全局配置
+                // 确保 config.js 已加载并初始化全局配置
                 if (!window.CONFIG || !window.CONFIG.API_BASE_URL) {
                     console.error('全局配置未初始化，请确保config.js已正确加载');
                     throw new Error('全局配置未初始化');
@@ -157,7 +152,7 @@
                 console.log('尝试从以下路径加载数据:', `${window.CONFIG.API_BASE_URL}/products/phone.json`);
                 
                 try {
-                    // 首先尝试加载分类特定的数据
+                    // 尝试加载分类特定的数据
                     const response = await fetch(`${window.CONFIG.API_BASE_URL}/products/phone.json`);
                     if (response.ok) {
                         const data = await response.json();
@@ -170,7 +165,7 @@
                 }
                 
                 try {
-                    // 尝试从通用产品数据加载
+                    // 尝试从通用路径加载产品数据
                     const response = await fetch(`${window.CONFIG.API_BASE_URL}/products.json`);
                     if (response.ok) {
                         const data = await response.json();
@@ -193,7 +188,7 @@
                         renderPhoneData(phoneItems);
                         return;
                     }
-                } catch (fallbackError) {
+                } catch (error) {
                     console.error('所有数据加载尝试均失败:', fallbackError);
                     document.getElementById('featured-content').innerHTML = '<div class="error-message">加载数据失败，请稍后再试</div>';
                 }
@@ -205,6 +200,7 @@
 
         // 渲染手机数据
         function renderPhoneData(phoneItems) {
+            // 获取需要填充内容的 DOM 元素
             const knowledgeItems = document.getElementById('knowledge-items');
             const featuredContent = document.getElementById('featured-content');
             const phoneDiscussion = document.getElementById('phone-discussion');
@@ -214,7 +210,7 @@
             featuredContent.innerHTML = '';
             
             // 在侧边栏添加手机知识项
-            phoneItems.slice(0, 5).forEach(item => {
+            phoneItems.slice(0, 5).forEach((item) => {
                 const sidebarItem = document.createElement('div');
                 sidebarItem.classList.add('sidebar-item');
                 sidebarItem.innerHTML = `
@@ -233,12 +229,12 @@
             knowledgeItems.appendChild(viewMoreLink);
 
             // 在主内容区域添加手机知识卡片
-            phoneItems.forEach(item => {
+            phoneItems.forEach((item) => {
                 const card = document.createElement('div');
                 card.classList.add('knowledge-card');
                 card.setAttribute('data-category', item.type || 'smartphone');
                 
-                // 添加卡片内容
+                // 构建卡片 HTML
                 card.innerHTML = `
                     <div class="card-image-container">
                         <img src="${item.image || 'https://via.placeholder.com/300x200?text=手机科技'}" alt="${item.name}" class="card-image">
@@ -248,7 +244,7 @@
                         <h3 class="card-title">${item.name}</h3>
                         <p class="card-description">${item.description}</p>
                         <div class="card-meta">
-                            <span><i class="fas fa-calendar"></i> ${new Date(item.date || Date.now()).toLocaleDateString()}</span>
+                            <span><i class="far fa-calendar-alt"></i> ${new Date(item.date || Date.now()).toLocaleDateString()}</span>
                             <span><i class="fas fa-eye"></i> ${item.views || Math.floor(Math.random() * 1000)}</span>
                         </div>
                         <div class="card-tags">
@@ -291,7 +287,7 @@
             ];
             
             phoneDiscussion.innerHTML = '';
-            discussions.forEach(discussion => {
+            discussions.forEach((discussion) => {
                 const discussionCard = document.createElement('div');
                 discussionCard.classList.add('community-post');
                 discussionCard.innerHTML = `
@@ -330,22 +326,21 @@
             initFilterButtons();
         }
 
-        // 初始化过滤按钮
+        // 初始化筛选按钮
         function initFilterButtons() {
-            document.querySelectorAll('.filter-button').forEach(button => {
-                button.addEventListener('click', () => {
-                    const filter = button.getAttribute('data-filter');
-                    const cards = document.querySelectorAll('.knowledge-card');
-                    
-                    // 更新按钮状态
-                    document.querySelectorAll('.filter-button').forEach(btn => {
-                        btn.classList.remove('active');
-                    });
+            const filterButtons = document.querySelectorAll('.filter-button');
+            const cards = document.querySelectorAll('.knowledge-card');
+            
+            filterButtons.forEach((button) => {
+                button.addEventListener('click', (event) => {
+                    const filter = event.target.dataset.filter;
+
+                    filterButtons.forEach((btn) => btn.classList.remove('active'));
                     button.classList.add('active');
-                    
-                    // 过滤卡片
-                    cards.forEach(card => {
-                        if (filter === 'all' || card.getAttribute('data-category') === filter) {
+
+                    cards.forEach((card) => {
+                        const category = card.dataset.category;
+                        if (filter === 'all' || category === filter) {
                             card.style.display = 'block';
                         } else {
                             card.style.display = 'none';
@@ -385,8 +380,8 @@
                 
                 // 获取当前用户信息，如果未登录则使用默认值
                 const currentUser = getCurrentUser() || { 
-                    username: '访客用户', 
-                    avatar: 'https://randomuser.me/api/portraits/lego/1.jpg' 
+                    name: '访客用户',
+                    avatar: 'https://via.placeholder.com/40x40?text=访客'
                 };
                 
                 commentCard.innerHTML = `
@@ -442,7 +437,7 @@
                         const title = card.querySelector('.card-title').textContent.toLowerCase();
                         const description = card.querySelector('.card-description').textContent.toLowerCase();
                         
-                        if (title.includes(searchTerm) || description.includes(searchTerm)) {
+                        if (title.includes(searchTerm) || description.includes(searchTerm) || (item.tags && item.tags.some(tag => tag.toLowerCase().includes(searchTerm)))) {
                             card.style.display = 'block';
                         } else {
                             card.style.display = 'none';

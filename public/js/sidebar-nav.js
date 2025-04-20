@@ -1,121 +1,106 @@
 /**
- * 侧边栏导航功能
- * 统一处理侧边栏按钮的跳转和样式
+ * Manages sidebar navigation functionality, handling button clicks,
+ * page transitions, and visual feedback (ripples, active state).
  */
 
 document.addEventListener('DOMContentLoaded', () => {
-    // 初始化侧边栏导航
-    initSidebarNavigation();
+  initSidebarNavigation();
 });
 
 /**
- * 初始化侧边栏导航
- * 为所有侧边栏按钮添加统一的事件处理和样式
+ * Initializes the sidebar navigation by attaching event listeners
+ * to all category buttons for click handling and visual effects.
  */
 function initSidebarNavigation() {
-    // 获取所有侧边栏按钮
-    const sidebarButtons = document.querySelectorAll('.category-nav button');
-    
-    // 为每个按钮添加点击事件和悬停效果
-    sidebarButtons.forEach(button => {
-        // 移除可能存在的内联onclick属性
-        if (button.hasAttribute('onclick')) {
-            const url = button.getAttribute('onclick').match(/window\.location\.href='([^']+)'/);
-            if (url && url[1]) {
-                button.setAttribute('data-href', url[1]);
-                button.removeAttribute('onclick');
-            }
-        }
-        
-        // 添加点击事件
-        button.addEventListener('click', handleSidebarButtonClick);
-        
-        // 添加涟漪效果
-        button.addEventListener('mousedown', createRippleEffect);
-    });
-    
-    // 高亮当前页面对应的按钮
-    highlightCurrentPageButton();
+  const sidebarButtons = document.querySelectorAll('.category-nav button');
+
+  sidebarButtons.forEach((button) => {
+    // Migrate inline onclick attributes to data-href
+    if (button.hasAttribute('onclick')) {
+      const match = button
+        .getAttribute('onclick')
+        .match(/window\.location\.href='([^']+)'/);
+      if (match && match[1]) {
+        button.setAttribute('data-href', match[1]);
+        button.removeAttribute('onclick');
+      }
+    }
+
+    button.addEventListener('click', handleSidebarButtonClick);
+    button.addEventListener('mousedown', createRippleEffect);
+  });
+
+  highlightCurrentPageButton();
 }
 
 /**
- * 处理侧边栏按钮点击
- * @param {Event} event - 点击事件
+ * Handles clicks on sidebar buttons, navigating to the appropriate
+ * page or refreshing the current one if the active button is clicked.
+ * @param {MouseEvent} event - The click event.
  */
 function handleSidebarButtonClick(event) {
-    const button = event.currentTarget;
-    
-    // 如果按钮有特殊处理（如登出按钮），则不进行页面跳转
-    if (button.id === 'logout-btn') {
-        // 登出功能由auth.js处理
-        return;
-    }
-    
-    // 获取按钮的目标URL
-    const href = button.getAttribute('data-href');
-    
-    // 如果有URL，则进行页面跳转
-    if (href) {
-        window.location.href = href;
-    } else if (button.classList.contains('active')) {
-        // 如果点击的是当前页面的按钮，刷新页面
-        window.location.reload();
-    }
+  const button = event.currentTarget;
+
+  // Special handling for the logout button (handled in auth.js)
+  if (button.id === 'logout-btn') {
+    return;
+  }
+
+  const href = button.getAttribute('data-href');
+
+  if (href) {
+    window.location.href = href;
+  } else if (button.classList.contains('active')) {
+    window.location.reload();
+  }
 }
 
 /**
- * 创建涟漪效果
- * @param {Event} event - 鼠标事件
+ * Creates a visual ripple effect on the clicked button.
+ * @param {MouseEvent} event - The mousedown event.
  */
 function createRippleEffect(event) {
-    const button = event.currentTarget;
-    
-    // 移除现有的涟漪效果
-    const ripples = button.querySelectorAll('.ripple');
-    ripples.forEach(ripple => ripple.remove());
-    
-    // 创建新的涟漪效果
-    const ripple = document.createElement('span');
-    ripple.classList.add('ripple');
-    button.appendChild(ripple);
-    
-    // 设置涟漪效果的位置
-    const rect = button.getBoundingClientRect();
-    const size = Math.max(rect.width, rect.height) * 2;
-    const x = event.clientX - rect.left - size / 2;
-    const y = event.clientY - rect.top - size / 2;
-    
-    ripple.style.width = `${size}px`;
-    ripple.style.height = `${size}px`;
-    ripple.style.left = `${x}px`;
-    ripple.style.top = `${y}px`;
-    
-    // 自动移除涟漪效果
-    setTimeout(() => {
-        ripple.remove();
-    }, 600);
+  const button = event.currentTarget;
+
+  // Remove existing ripples
+  button.querySelectorAll('.ripple').forEach((ripple) => ripple.remove());
+
+  const ripple = document.createElement('span');
+  ripple.classList.add('ripple');
+  button.appendChild(ripple);
+
+  // Calculate ripple position and size
+  const rect = button.getBoundingClientRect();
+  const size = Math.max(rect.width, rect.height) * 2;
+  const x = event.clientX - rect.left - size / 2;
+  const y = event.clientY - rect.top - size / 2;
+
+  ripple.style.width = `${size}px`;
+  ripple.style.height = `${size}px`;
+  ripple.style.left = `${x}px`;
+  ripple.style.top = `${y}px`;
+
+  // Remove ripple after animation
+  setTimeout(() => ripple.remove(), 600);
 }
 
 /**
- * 高亮当前页面对应的按钮
+ * Highlights the sidebar button corresponding to the current page.
  */
 function highlightCurrentPageButton() {
-    const currentPath = window.location.pathname;
-    const sidebarButtons = document.querySelectorAll('.category-nav button');
-    
-    // 移除所有按钮的active类
-    sidebarButtons.forEach(button => {
-        button.classList.remove('active');
-    });
-    
-    // 为当前页面对应的按钮添加active类
-    sidebarButtons.forEach(button => {
-        const href = button.getAttribute('data-href');
-        if (href && currentPath === href) {
-            button.classList.add('active');
-        } else if (currentPath === '/' && button.textContent.includes('全部内容')) {
-            // 首页特殊处理
-            button.classList.add('active');
-        }
-    });
+  const currentPath = window.location.pathname;
+  const sidebarButtons = document.querySelectorAll('.category-nav button');
+
+  // Remove active class from all buttons
+  sidebarButtons.forEach((button) => button.classList.remove('active'));
+
+  // Add active class to the button matching the current path
+  sidebarButtons.forEach((button) => {
+    const href = button.getAttribute('data-href');
+    const isHomepageButton = currentPath === '/' && button.textContent.includes('全部内容');
+
+    if ((href && currentPath === href) || isHomepageButton) {
+      button.classList.add('active');
+    }
+  });
 }

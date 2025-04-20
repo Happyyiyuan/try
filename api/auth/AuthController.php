@@ -4,7 +4,8 @@ require_once __DIR__ . '/../../utils/Database.php';
 require_once __DIR__ . '/../../utils/jwt.php';
 require_once __DIR__ . '/../../utils/response_helpers.php'; // 引入响应辅助函数
 
-class AuthController {
+class AuthController
+{
     private $db;
 
     public function __construct() {
@@ -13,7 +14,7 @@ class AuthController {
 
     public function register() {
         $data = json_decode(file_get_contents('php://input'), true);
-        
+
         if (!isset($data['username']) || !isset($data['password']) || !isset($data['email'])) {
             errorResponse('请提供用户名、密码和邮箱', 400);
             return;
@@ -30,19 +31,26 @@ class AuthController {
             return;
         }
 
-        // 创建新用户
+        $this->createUser($data);
+    }
+
+    private function createUser($userData) {
         $hashedPassword = password_hash($data['password'], PASSWORD_DEFAULT);
         $userId = $this->db->insert('users', [
-            'username' => $data['username'],
+            'username' => $userData['username'],
             'password' => $hashedPassword,
-            'email' => $data['email'],
+            'email' => $userData['email'],
             'created_at' => date('Y-m-d H:i:s')
         ]);
 
-        $token = generateJWT(['user_id' => $userId, 'username' => $data['username']]);
+        $this->generateAuthResponse($userId, $userData['username'], $userData['email']);
+    }
+
+    private function generateAuthResponse($userId, $username, $email) {
+        $token = generateJWT(['user_id' => $userId, 'username' => $username]);
 
         jsonResponse([
-            'token' => $token,
+            'authToken' => $token,
             'user' => [
                 'id' => $userId,
                 'username' => $data['username'],
@@ -69,19 +77,25 @@ class AuthController {
             return;
         }
 
-        $token = generateJWT(['user_id' => $user['id'], 'username' => $user['username']]);
+        $this->generateAuthResponse($user['id'], $user['username'], $user['email']);
+    }
 
-        jsonResponse([
-            'token' => $token,
-            'user' => [
-                'id' => $user['id'],
-                'username' => $user['username'],
-                'email' => $user['email']
-            ]
-        ]);
+    public function requestPasswordReset() {
+        $data = json_decode(file_get_contents('php://input'), true);
+
+        if (!isset($data['email'])) {
+            errorResponse('请提供邮箱地址', 400);
+            return;
+        }
+
+        $this->sendPasswordResetLink($data['email']);
     }
 
     public function resetPassword() {
+        // This function is not used, the logic is handled in requestPasswordReset
+    }
+
+    private function sendPasswordResetLink($email) {
         $data = json_decode(file_get_contents('php://input'), true);
 
         if (!isset($data['email'])) {
@@ -114,34 +128,4 @@ class AuthController {
 
         jsonResponse(['message' => '密码重置链接已发送到您的邮箱']);
     }
-}
-
-// 处理请求
-$controller = new AuthController();
-$method = $_SERVER['REQUEST_METHOD'];
-$path = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
-
-// header('Content-Type: application/json'); // 由 jsonResponse 处理
-
-switch ($path) {
-    case '/api/auth/register':
-        if ($method === 'POST') {
-            $controller->register();
-        }
-        break;
-
-    case '/api/auth/login':
-        if ($method === 'POST') {
-            $controller->login();
-        }
-        break;
-
-    case '/api/auth/reset-password':
-        if ($method === 'POST') {
-            $controller->resetPassword();
-        }
-        break;
-
-    default:
-        errorResponse('未找到请求的接口', 404);
 }

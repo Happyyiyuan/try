@@ -1,20 +1,16 @@
 /**
- * API客户端模块 - 处理所有与后端API的通信
- * 提供统一的数据请求接口，处理错误、认证等
- * 依赖: config.js
+ * API Client Module - Handles all communication with the backend API.
+ * Provides a unified interface for data requests, handling errors, authentication, etc.
+ * Depends on: config.js
  */
 
-// 确保必要的依赖已加载
 document.addEventListener('DOMContentLoaded', () => {
-    // 验证全局配置是否可用
     if (!window.CONFIG) {
-        console.error('错误: 全局配置未加载，api-client.js需要config.js先加载');
+        console.error('Error: Global configuration not loaded. api-client.js requires config.js to be loaded first.');
     }
-    
-    console.log('API客户端已初始化');
+    console.log('API Client initialized.');
 });
 
-// API类
 class APIClient {
     constructor(baseURL) {
         this.baseURL = baseURL || window.CONFIG?.API_BASE_URL || '/api';
@@ -22,28 +18,26 @@ class APIClient {
         this.defaultTimeout = 30000; // 默认超时：30秒
     }
     
-    // 核心请求方法
     async request(endpoint, options = {}) {
-        const {
-            method = 'GET',
-            data = null,
-            headers = {},
-            timeout = this.defaultTimeout,
-            showLoading = true,
-            showError = true,
-            cache = false
-        } = options;
-        
-        // 准备请求URL和唯一键
+        const { method = 'GET',
+                data = null,
+                headers = {},
+                timeout = this.defaultTimeout,
+                showLoading = true,
+                showError = true } = options;
+
         const url = endpoint.startsWith('http') ? endpoint : `${this.baseURL}${endpoint}`;
         const requestKey = `${method}:${url}:${JSON.stringify(data)}`;
         
-        // 检查是否有同样的请求正在进行中
         if (this.activeRequests.has(requestKey)) {
             return this.activeRequests.get(requestKey);
         }
-        
-        // 设置请求headers
+
+        const requestPromise = this.#makeRequest(url, method, data, headers, timeout, showLoading, showError, requestKey);
+        this.activeRequests.set(requestKey, requestPromise);
+        return requestPromise;
+    }
+    async #makeRequest(url, method, data, headers, timeout, showLoading, showError, requestKey){
         const requestHeaders = {
             'Content-Type': 'application/json',
             ...headers
@@ -53,7 +47,7 @@ class APIClient {
         const token = localStorage.getItem('token');
         if (token) {
             requestHeaders['Authorization'] = `Bearer ${token}`;
-        }
+        }        
         
         // 准备fetch选项
         const fetchOptions = {
@@ -110,7 +104,7 @@ class APIClient {
                     // 处理特定状态码
                     if (response.status === 401) {
                         if (window.auth && typeof window.auth.clearSession === 'function') {
-                            window.auth.clearSession();
+                                window.auth.clearSession();
                         }
                         // 如果不是登录页面，重定向到登录
                         if (!window.location.pathname.includes('login.html')) {
@@ -200,40 +194,14 @@ class APIClient {
         return requestPromise;
     }
     
-    // GET请求的便捷方法
     async get(endpoint, params = {}, options = {}) {
-        return this.request(endpoint, {
-            method: 'GET',
-            data: params,
-            ...options
-        });
+        return this.request(endpoint, { method: 'GET', data: params, ...options });
     }
-    
-    // POST请求的便捷方法
     async post(endpoint, data = {}, options = {}) {
-        return this.request(endpoint, {
-            method: 'POST',
-            data,
-            ...options
-        });
+        return this.request(endpoint, { method: 'POST', data, ...options });
     }
-    
-    // PUT请求的便捷方法
     async put(endpoint, data = {}, options = {}) {
-        return this.request(endpoint, {
-            method: 'PUT',
-            data,
-            ...options
-        });
-    }
-    
-    // DELETE请求的便捷方法
-    async delete(endpoint, params = {}, options = {}) {
-        return this.request(endpoint, {
-            method: 'DELETE',
-            data: params,
-            ...options
-        });
+        return this.request(endpoint, { method: 'PUT', data, ...options });
     }
     
     // 显示错误通知
@@ -293,7 +261,7 @@ class APIClient {
             document.body.appendChild(indicator);
         } else {
             // 如果已存在，增加计数器
-            const counter = parseInt(indicator.getAttribute('data-counter') || '0');
+            const counter = parseInt(indicator.dataset.counter || '0');
             indicator.setAttribute('data-counter', (counter + 1).toString());
         }
         
@@ -305,7 +273,7 @@ class APIClient {
         if (!indicator) return;
         
         // 减少计数器
-        const counter = parseInt(indicator.getAttribute('data-counter') || '0');
+        const counter = parseInt(indicator.dataset.counter || '0');
         
         if (counter <= 1) {
             // 如果是最后一个请求，淡出加载指示器

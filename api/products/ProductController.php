@@ -4,14 +4,17 @@ require_once __DIR__ . '/../../config/config.php'; // Include config for respons
 require_once __DIR__ . '/../../utils/Database.php';
 require_once __DIR__ . '/../../utils/jwt.php';
 
-class ProductController {
+class ProductController
+{
     private $db;
 
-    public function __construct() {
+    public function __construct()
+    {
         $this->db = Database::getInstance();
     }
 
-    private function verifyToken() {
+    private function verifyToken()
+    {
         $headers = getallheaders();
         if (!isset($headers['Authorization'])) {
             return false;
@@ -26,7 +29,8 @@ class ProductController {
         }
     }
 
-    public function getProducts() {
+    public function getProducts()
+    {
         $category = isset($_GET['category']) ? $_GET['category'] : null;
         $search = isset($_GET['search']) ? $_GET['search'] : null;
 
@@ -49,7 +53,8 @@ class ProductController {
         jsonResponse(['products' => $products]); // Use jsonResponse
     }
 
-    public function getProduct($id) {
+    public function getProduct($id)
+    {
         $product = $this->db->fetch(
             'SELECT * FROM products WHERE id = ?',
             [$id]
@@ -63,7 +68,8 @@ class ProductController {
         jsonResponse($product); // Use jsonResponse
     }
 
-    public function createProduct() {
+    public function createProduct()
+    {
         $user = $this->verifyToken();
         if (!$user) {
             errorResponse('未授权', 401); // Use errorResponse
@@ -71,7 +77,7 @@ class ProductController {
         }
 
         $data = json_decode(file_get_contents('php://input'), true);
-        
+
         if (!isset($data['name']) || !isset($data['description']) || !isset($data['category'])) {
             errorResponse('请提供完整的产品信息', 400); // Use errorResponse
             return;
@@ -94,7 +100,8 @@ class ProductController {
         jsonResponse($product, 201); // Use jsonResponse with 201 status
     }
 
-    public function updateProduct($id) {
+    public function updateProduct($id)
+    {
         $user = $this->verifyToken();
         if (!$user) {
             errorResponse('未授权', 401); // Use errorResponse
@@ -117,12 +124,20 @@ class ProductController {
         }
 
         $data = json_decode(file_get_contents('php://input'), true);
-        
+
         $updateData = [];
-        if (isset($data['name'])) $updateData['name'] = $data['name'];
-        if (isset($data['description'])) $updateData['description'] = $data['description'];
-        if (isset($data['category'])) $updateData['category'] = $data['category'];
-        if (isset($data['image_url'])) $updateData['image_url'] = $data['image_url'];
+        if (isset($data['name'])) {
+            $updateData['name'] = $data['name'];
+        }
+        if (isset($data['description'])) {
+            $updateData['description'] = $data['description'];
+        }
+        if (isset($data['category'])) {
+            $updateData['category'] = $data['category'];
+        }
+        if (isset($data['image_url'])) {
+            $updateData['image_url'] = $data['image_url'];
+        }
         $updateData['updated_at'] = date('Y-m-d H:i:s');
 
         $this->db->update(
@@ -140,7 +155,8 @@ class ProductController {
         jsonResponse($updatedProduct); // Use jsonResponse
     }
 
-    public function deleteProduct($id) {
+    public function deleteProduct($id)
+    {
         $user = $this->verifyToken();
         if (!$user) {
             errorResponse('未授权', 401); // Use errorResponse

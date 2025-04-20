@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-    <meta charset="UTF-8">
+    <meta charset="UTF-8"/>
+    <meta name="description" content="机器学习知识库 - 探索机器学习算法、框架和实践应用"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>机器学习知识库</title>
     <link rel="stylesheet" href="/public/css/styles.css">
@@ -9,11 +10,9 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="icon" href="https://cdn-icons-png.flaticon.com/512/2103/2103652.png" type="image/png">
-    <meta name="description" content="机器学习知识库 - 探索机器学习算法、框架和实践应用">
     <meta name="keywords" content="机器学习,算法,数据科学,监督学习,无监督学习,强化学习,深度学习">
     <meta name="author" content="AI科技库团队">
-    <script src="../public/js/config.js"></script>
-    <script src="../public/js/main.js" defer></script>
+    <script src="/public/js/config.js"></script>
     <script src="../public/js/sidebar-loader.js" defer></script>
     <script src="../public/js/seo-meta-tags.js" defer></script>
     <script src="../public/js/analytics.js" defer></script>
@@ -22,6 +21,7 @@
             position: relative;
             height: 300px;
             border-radius: var(--border-radius-lg);
+            box-shadow: var(--shadow-lg);
             overflow: hidden;
             margin-bottom: 32px;
             box-shadow: var(--shadow-lg);
@@ -155,7 +155,7 @@
             border-bottom: 1px solid var(--border-color);
             display: flex;
             align-items: center;
-        }
+    }
         
         .ml-card-list li:last-child {
             border-bottom: none;
@@ -525,39 +525,6 @@
                 </div>
             </section>
         </main>
-    </div>
-    
-    <script>
-        // 页面滚动动画效果
-        document.addEventListener('DOMContentLoaded', () => {
-            const animateOnScroll = () => {
-                const elements = document.querySelectorAll('.ml-card, .ml-feature-item');
-                
-                elements.forEach(element => {
-                    const elementTop = element.getBoundingClientRect().top;
-                    const elementVisible = 150;
-                    
-                    if (elementTop < window.innerHeight - elementVisible) {
-                        element.style.opacity = '1';
-                        element.style.transform = 'translateY(0)';
-                    }
-                });
-            };
-            
-            // 设置初始状态
-            document.querySelectorAll('.ml-card, .ml-feature-item').forEach(element => {
-                element.style.opacity = '0';
-                element.style.transform = 'translateY(20px)';
-                element.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
-            });
-            
-            // 初始检查
-            setTimeout(animateOnScroll, 300);
-            
-            // 滚动时检查
-            window.addEventListener('scroll', animateOnScroll);
-        });
-    </script>
-    <script src="../public/js/sidebar-unifier.js" defer></script>
+    </div>    
 </body>
 </html>

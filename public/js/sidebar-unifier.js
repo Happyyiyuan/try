@@ -1,31 +1,17 @@
-/**
- * 侧边栏统一器
- * 确保所有页面的侧边栏样式和行为保持一致
- */
-
 document.addEventListener('DOMContentLoaded', () => {
-    // 初始化侧边栏统一器
-    initSidebarUnifier();
+  initSidebarUnifier();
 });
 
-/**
- * 初始化侧边栏统一器
- */
 function initSidebarUnifier() {
-    // 获取当前页面路径
-    const currentPath = window.location.pathname;
-    
-    // 统一侧边栏样式
-    unifyStyles();
-    
-    // 统一侧边栏导航项
-    unifyNavItems();
-    
-    // 统一侧边栏交互行为
-    unifyBehavior();
-    
-    // 高亮当前页面对应的导航项
-    highlightCurrentPage(currentPath);
+  const currentPath = window.location.pathname;
+
+  unifyStyles();
+
+  unifyNavItems();
+
+  unifyBehavior();
+
+  highlightCurrentPage(currentPath);
 }
 
 /**
@@ -33,72 +19,51 @@ function initSidebarUnifier() {
  */
 function unifyStyles() {
     // 确保侧边栏容器有正确的类名
-    const sidebar = document.querySelector('.sidebar');
-    if (sidebar) {
-        // 添加统一的样式类
-        sidebar.classList.add('unified-sidebar');
-        
-        // 确保logo容器样式一致
-        const logoContainer = sidebar.querySelector('.logo-container');
-        if (logoContainer) {
-            logoContainer.style.marginBottom = '24px';
-            logoContainer.style.display = 'flex';
-            logoContainer.style.alignItems = 'center';
-            logoContainer.style.justifyContent = 'space-between';
-        }
-        
-        // 确保所有分类导航样式一致
-        const categoryNavs = sidebar.querySelectorAll('.category-nav');
-        categoryNavs.forEach(nav => {
-            nav.style.marginBottom = '24px';
-        });
-        
-        // 确保所有标题样式一致
-        const sectionTitles = sidebar.querySelectorAll('.section-title');
-        sectionTitles.forEach(title => {
-            title.style.fontSize = '0.85rem';
-            title.style.marginBottom = '16px';
-            title.style.color = 'var(--text-tertiary)';
-            title.style.fontWeight = 'var(--font-weight-semibold)';
-            title.style.textTransform = 'uppercase';
-            title.style.letterSpacing = '1px';
-        });
-    }
+  const sidebar = document.querySelector('.sidebar');
+  if (!sidebar) return;
+
+  sidebar.classList.add('unified-sidebar');
+
+  const logoContainer = sidebar.querySelector('.logo-container');
+  if (logoContainer) {
+    Object.assign(logoContainer.style, {
+      marginBottom: '24px',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'space-between',
+    });
+  }
+
+  sidebar.querySelectorAll('.category-nav').forEach(nav => {
+    nav.style.marginBottom = '24px';
+  });
+
+  sidebar.querySelectorAll('.section-title').forEach(title => {
+    Object.assign(title.style, {
+      fontSize: '0.85rem',
+      marginBottom: '16px',
+      color: 'var(--text-tertiary)',
+      fontWeight: 'var(--font-weight-semibold)',
+      textTransform: 'uppercase',
+      letterSpacing: '1px',
+    });
+  });
 }
 
-/**
- * 统一侧边栏导航项
- */
 function unifyNavItems() {
-    // 获取所有导航按钮
-    const navButtons = document.querySelectorAll('.category-nav button');
-    
-    // 为每个按钮添加统一的样式和属性
-    navButtons.forEach(button => {
-        // 移除可能存在的内联样式
-        button.removeAttribute('style');
-        
-        // 将onclick属性转换为data-href属性
-        if (button.hasAttribute('onclick')) {
-            const onclickAttr = button.getAttribute('onclick');
-            const hrefMatch = onclickAttr.match(/window\.location\.href=['"]([^'"]+)['"]/);
-            if (hrefMatch && hrefMatch[1]) {
-                // 确保路径格式一致（使用绝对路径）
-                let href = hrefMatch[1];
-                if (href.startsWith('./') || href.startsWith('../')) {
-                    // 转换相对路径为绝对路径
-                    const currentPath = window.location.pathname;
-                    const currentDir = currentPath.substring(0, currentPath.lastIndexOf('/') + 1);
-                    href = new URL(href, window.location.origin + currentDir).pathname;
-                } else if (!href.startsWith('/')) {
-                    href = '/' + href;
-                }
-                
-                button.setAttribute('data-href', href);
-                button.removeAttribute('onclick');
-            }
-        }
-    });
+  document.querySelectorAll('.category-nav button').forEach(button => {
+    button.removeAttribute('style');
+    if (!button.hasAttribute('onclick')) return;
+
+    const onclickAttr = button.getAttribute('onclick');
+    const hrefMatch = onclickAttr.match(/window\.location\.href=['"]([^'"]+)['"]/);
+    if (!hrefMatch || !hrefMatch[1]) return;
+
+    const href = new URL(hrefMatch[1], window.location.origin + window.location.pathname).pathname;
+
+    button.setAttribute('data-href', href);
+    button.removeAttribute('onclick');
+  });
 }
 
 /**
@@ -106,30 +71,23 @@ function unifyNavItems() {
  */
 function unifyBehavior() {
     // 获取所有导航按钮
-    const navButtons = document.querySelectorAll('.category-nav button');
-    
-    // 为每个按钮添加点击事件和涟漪效果
-    navButtons.forEach(button => {
-        // 移除现有的事件监听器
-        const newButton = button.cloneNode(true);
-        button.parentNode.replaceChild(newButton, button);
-        
-        // 添加点击事件
-        newButton.addEventListener('click', handleButtonClick);
-        
-        // 添加涟漪效果
-        newButton.addEventListener('mousedown', createRippleEffect);
-    });
-    
-    // 添加主题切换功能
-    const themeToggle = document.getElementById('theme-toggle');
-    if (themeToggle) {
-        themeToggle.addEventListener('click', toggleTheme);
-    }
+  document.querySelectorAll('.category-nav button').forEach(button => {
+    const newButton = button.cloneNode(true);
+    button.parentNode.replaceChild(newButton, button);
+
+    newButton.addEventListener('click', handleButtonClick);
+
+    newButton.addEventListener('mousedown', createRippleEffect);
+  });
+
+  const themeToggle = document.getElementById('theme-toggle');
+  if (themeToggle) {
+    themeToggle.addEventListener('click', toggleTheme);
+  }
 }
 
 /**
- * 处理按钮点击事件
+ * Handles button click events.
  * @param {Event} event - 点击事件
  */
 function handleButtonClick(event) {

@@ -1,36 +1,32 @@
 <?php
 /**
- * API 响应辅助函数
+ * API Response Helper Functions
  */
 
 /**
- * 发送 JSON 响应
+ * Sends a JSON response.
  *
- * @param mixed $data 要编码为 JSON 的数据
- * @param int $status_code HTTP 状态码 (默认为 200)
+ * @param mixed $data The data to be encoded as JSON.
+ * @param int $statusCode The HTTP status code (defaults to 200).
  * @return void
  */
-function jsonResponse($data, $status_code = 200) {
-    header('Content-Type: application/json; charset=utf-8');
-    http_response_code($status_code);
-    echo json_encode($data, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
-    exit; // 确保脚本在发送响应后停止执行
+function sendJsonResponse($data, int $statusCode = 200): void
+{
+    header('Content-Type: application/json; charset=UTF-8');
+    http_response_code($statusCode);
+    echo json_encode($data, JSON_UNESCAPED_UNICODE);
+    exit;
 }
 
 /**
- * 发送 JSON 错误响应
+ * Sends a JSON error response.
  *
- * @param string $message 错误消息
- * @param int $status_code HTTP 状态码
- * @param array|null $errors 可选的详细错误信息
+ * @param string $message The error message.
+ * @param int $statusCode The HTTP status code.
+ * @param array|null $errors Optional detailed error information.
  * @return void
  */
-function errorResponse($message, $status_code, $errors = null) {
-    $response = ['error' => $message];
-    if ($errors !== null) {
-        $response['errors'] = $errors;
-    }
-    jsonResponse($response, $status_code);
+function sendErrorResponse(string $message, int $statusCode, ?array $errors = null): void
+{
+    sendJsonResponse(['error' => $message, 'errors' => $errors], $statusCode);
 }
-
-?>

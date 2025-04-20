@@ -2,7 +2,7 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>产品详情 - AI科技库</title>
     <link rel="stylesheet" href="/public/css/styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -13,7 +13,7 @@
     <script src="../public/js/main.js" defer></script>
     <style>
         .product-loading {
-            text-align: center;
+            text-align:center;
             padding: 60px 0;
         }
         
@@ -48,7 +48,7 @@
         
         @keyframes typing {
             0%, 100% {
-                transform: translateY(0);
+                transform:translateY(0);
                 opacity: 0.6;
             }
             50% {
@@ -59,7 +59,7 @@
         
         .product-header {
             position: relative;
-            padding-bottom: 20px;
+            padding-bottom:20px;
             margin-bottom: 30px;
             border-bottom: 1px solid var(--border-color);
         }
@@ -69,7 +69,7 @@
         }
         
         .back-button:hover {
-            transform: translateX(-5px);
+            transform:translateX(-5px);
         }
         
         .specs-grid {
@@ -79,7 +79,7 @@
         }
         
         .spec-item {
-            padding: 16px;
+            padding:16px;
             background: rgba(99, 102, 241, 0.05);
             border-radius: 12px;
             transition: all 0.3s ease;
@@ -87,7 +87,7 @@
         }
         
         .spec-item:hover {
-            transform: translateY(-3px);
+            transform:translateY(-3px);
             box-shadow: var(--shadow-md);
             border-color: var(--primary-color);
             background: rgba(99, 102, 241, 0.08);
@@ -98,7 +98,7 @@
 <body>
     <div class="container">
         <aside class="sidebar">
-            <div class="logo-container" style="margin-bottom: 32px; display: flex; align-items: center; justify-content: space-between;">
+            <div class="logo-container">
                 <div style="display: flex; align-items: center;">
                     <i class="fas fa-microchip" style="font-size: 24px; margin-right: 12px; background: linear-gradient(to right, var(--gradient-start), var(--gradient-end)); -webkit-background-clip: text; -webkit-text-fill-color: transparent;"></i>
                     <h2 style="margin: 0; font-weight: 700; font-size: 20px;">AI科技库</h2>
@@ -110,13 +110,13 @@
             
             <div class="category-nav">
                 <h3 style="font-size: 16px; margin-bottom: 16px; color: var(--text-secondary);">分类导航</h3>
-                <button data-href="../index.html""><i class="fas fa-th-large"></i> 全部</button>
-                <button data-href="/phone.html""><i class="fas fa-mobile-alt"></i> 手机</button>
-                <button data-href="/computer.html""><i class="fas fa-laptop"></i> 电脑配件</button>
-                <button data-href="/digital.html""><i class="fas fa-headphones"></i> 数码配件</button>
-                <button data-href="/ai.html""><i class="fas fa-microchip"></i> AI技术</button>
-                <button data-href="/ml.html""><i class="fas fa-robot"></i> 机器学习</button>
-                <button data-href="/deep-learning.html""><i class="fas fa-brain"></i> 深度学习</button>
+                <button data-href="../index.html"><i class="fas fa-th-large"></i> 全部</button>
+                <button data-href="/phone.html"><i class="fas fa-mobile-alt"></i> 手机</button>
+                <button data-href="/computer.html"><i class="fas fa-laptop"></i> 电脑配件</button>
+                <button data-href="/digital.html"><i class="fas fa-headphones"></i> 数码配件</button>
+                <button data-href="/ai.html"><i class="fas fa-microchip"></i> AI技术</button>
+                <button data-href="/ml.html"><i class="fas fa-robot"></i> 机器学习</button>
+                <button data-href="/deep-learning.html"><i class="fas fa-brain"></i> 深度学习</button>
             </div>
         </aside>
         
@@ -138,16 +138,11 @@
     </div>
     
     <script>
-        // 解析URL参数
         const urlParams = new URLSearchParams(window.location.search);
         const productId = urlParams.get('id');
 
-        // 加载产品数据
         fetch('../products.json', {
-            headers: {
-                'Cache-Control': 'no-cache',
-                'Pragma': 'no-cache'
-            }
+            headers: {'Cache-Control': 'no-cache', 'Pragma': 'no-cache'}
         })
             .then(response => response.json())
             .then(products => {
@@ -155,12 +150,7 @@
                 if(product) {
                     const productContainer = document.getElementById('product-container');
                     
-                    // 构建产品头部信息
-                    let productHTML = `
-                        <a href="javascript:history.back()" class="back-button" style="display: inline-flex; align-items: center; margin-bottom: 20px; color: var(--primary-color); text-decoration: none;">
-                            <i class="fas fa-arrow-left" style="margin-right: 8px;"></i> 返回列表
-                        </a>
-                        <div class="product-header" style="margin-bottom: 30px; padding-bottom: 20px; border-bottom: 1px solid var(--border-color);">
+                    let productHTML = `                        <div class="product-header">
                             <div class="card-badge" style="display: inline-block; padding: 8px 16px; background: rgba(99, 102, 241, 0.1); color: var(--primary-color); border-radius: 20px; font-size: 14px; margin-bottom: 16px; font-weight: 600; box-shadow: 0 2px 4px rgba(0,0,0,0.05);">
                                 <i class="fas ${getCategoryIcon(product.category)}" style="margin-right: 6px;"></i> ${getCategoryName(product.category)}
                             </div>
@@ -168,30 +158,27 @@
                             <p style="color: var(--text-secondary); font-size: 18px; line-height: 1.6; max-width: 800px;">${product.description}</p>
                         </div>`;
                     
-                    // 添加产品图片（如果有）
                     if (product.image) {
                         productHTML += `
-                        <div class="product-image-container" style="margin-bottom: 40px; text-align: center; background: linear-gradient(135deg, rgba(99, 102, 241, 0.08), rgba(79, 70, 229, 0.15)); border-radius: 24px; padding: 40px; box-shadow: var(--shadow-md); transition: all 0.4s ease; position: relative; overflow: hidden;" onmouseover="this.style.transform='scale(1.02)';this.style.boxShadow='0 15px 30px -10px rgba(0, 0, 0, 0.15)';" onmouseout="this.style.transform='scale(1)';this.style.boxShadow='var(--shadow-md)';">
-                            <div style="position: absolute; top: -50px; right: -50px; width: 150px; height: 150px; background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end)); opacity: 0.1; border-radius: 50%;"></div>
-                            <div style="position: absolute; bottom: -30px; left: -30px; width: 100px; height: 100px; background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end)); opacity: 0.1; border-radius: 50%;"></div>
-                            <img class="product-image" src="${product.image}" alt="${product.name}" style="max-width: 100%; max-height: 500px; border-radius: 12px; object-fit: contain; filter: drop-shadow(0 10px 15px rgba(0,0,0,0.1)); transition: all 0.5s ease;" onmouseover="this.style.transform='translateY(-10px)';" onmouseout="this.style.transform='translateY(0)';">
+                        <div class="product-image-container">
+                            <div class="gradient-circle top-right"></div>
+                            <div class="gradient-circle bottom-left"></div>
+                            <img class="product-image" src="${product.image}" alt="${product.name}">
                         </div>`;
                     }
                     
-                    // 添加技术规格部分
                     productHTML += `
-                    <div class="tech-specs" style="background: var(--card-bg); border-radius: 20px; padding: 32px; box-shadow: var(--shadow-md); border: 1px solid var(--border-color); position: relative; overflow: hidden;">
-                        <div style="position: absolute; top: 0; right: 0; width: 150px; height: 150px; background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end)); opacity: 0.03; border-radius: 0 0 0 100%;"></div>
-                        <h3 style="font-size: 22px; margin-bottom: 24px; display: flex; align-items: center; position: relative;">
-                            <i class="fas fa-microchip" style="margin-right: 12px; color: var(--primary-color); font-size: 20px;"></i> 技术规格
+                    <div class="tech-specs">
+                        <div class="gradient-corner"></div>
+                        <h3>
+                            <i class="fas fa-microchip"></i> 技术规格
                         </h3>
                         
-                        <div class="specs-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 16px;">
+                        <div class="specs-grid">
                             ${Object.entries(product).filter(([key, value]) => 
                                 key !== 'id' && key !== 'name' && key !== 'description' && key !== 'category' && 
                                 key !== 'image' && key !== 'title' && key !== 'specs' && value !== undefined
                             ).map(([key, value]) => {
-                                // 处理布尔值显示
                                 let displayValue = value;
                                 if (typeof value === 'boolean') {
                                     displayValue = value ? '是' : '否';
@@ -200,65 +187,57 @@
                                 }
                                 
                                 return `
-                                <div class="spec-item" style="padding: 16px; background: rgba(99, 102, 241, 0.05); border-radius: 12px; transition: all 0.3s ease; border: 1px solid transparent;" onmouseover="this.style.transform='translateY(-3px)';this.style.boxShadow='var(--shadow-md)';this.style.borderColor='var(--primary-color)';this.style.background='rgba(99, 102, 241, 0.08)';" onmouseout="this.style.transform='translateY(0)';this.style.boxShadow='none';this.style.borderColor='transparent';this.style.background='rgba(99, 102, 241, 0.05)';">
-                                    <div style="font-weight: 600; margin-bottom: 8px; color: var(--primary-color); font-size: 15px;">${getSpecName(key)}</div>
-                                    <div style="color: var(--text-color);">${displayValue}</div>
+                                <div class="spec-item" onmouseover="this.style.borderColor='var(--primary-color)';this.style.background='rgba(99, 102, 241, 0.08)';" onmouseout="this.style.borderColor='transparent';this.style.background='rgba(99, 102, 241, 0.05)';">
+                                    <div>${getSpecName(key)}</div>
+                                    <div>${displayValue}</div>
                                 </div>
                                 `;
                             }).join('')}
                             
                             ${product.specs ? `
-                            <div class="spec-item" style="padding: 16px; background: rgba(99, 102, 241, 0.05); border-radius: 12px; transition: all 0.3s ease; border: 1px solid transparent;" onmouseover="this.style.transform='translateY(-3px)';this.style.boxShadow='var(--shadow-md)';this.style.borderColor='var(--primary-color)';this.style.background='rgba(99, 102, 241, 0.08)';" onmouseout="this.style.transform='translateY(0)';this.style.boxShadow='none';this.style.borderColor='transparent';this.style.background='rgba(99, 102, 241, 0.05)';">
-                                <div style="font-weight: 600; margin-bottom: 8px; color: var(--primary-color); font-size: 15px;">规格</div>
-                                <div style="color: var(--text-color);">${Array.isArray(product.specs) ? product.specs.join(', ') : product.specs}</div>
+                            <div class="spec-item" onmouseover="this.style.borderColor='var(--primary-color)';this.style.background='rgba(99, 102, 241, 0.08)';" onmouseout="this.style.borderColor='transparent';this.style.background='rgba(99, 102, 241, 0.05)';">
+                                <div>规格</div>
+                                <div>${Array.isArray(product.specs) ? product.specs.join(', ') : product.specs}</div>
                             </div>
                             ` : ''}
                         </div>
                     </div>
                     `;
                     
-                    // 设置完整的HTML
                     productContainer.innerHTML = productHTML;
                 } else {
                     document.getElementById('product-container').innerHTML = `
-                        <a href="../index.html" class="back-button" style="display: inline-flex; align-items: center; margin-bottom: 20px; color: var(--primary-color); text-decoration: none;">
-                            <i class="fas fa-arrow-left" style="margin-right: 8px;"></i> 返回列表
-                        </a>
-                        <div style="text-align: center; padding: 60px; background: var(--card-bg); border-radius: 16px; box-shadow: var(--shadow-md); border: 1px solid var(--border-color);">
-                            <i class="fas fa-exclamation-circle" style="font-size: 64px; color: var(--text-secondary); margin-bottom: 24px; opacity: 0.8;"></i>
-                            <h3 style="font-size: 24px; margin-bottom: 12px; color: var(--text-color);">产品未找到</h3>
-                            <p style="color: var(--text-secondary); font-size: 16px;">抱歉，未找到您请求的产品信息</p>
-                            <button data-href="../index.html"" style="margin-top: 24px; padding: 10px 20px; background: var(--primary-color); color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 600; transition: all 0.3s ease;" onmouseover="this.style.transform='translateY(-3px)';this.style.boxShadow='var(--shadow-lg)';" onmouseout="this.style.transform='translateY(0)';this.style.boxShadow='none';">
-                                <i class="fas fa-home" style="margin-right: 8px;"></i> 返回首页
+                        <div class="not-found">
+                            <i class="fas fa-exclamation-circle"></i>
+                            <h3>产品未找到</h3>
+                            <p>抱歉，未找到您请求的产品信息</p>
+                            <button data-href="../index.html">
+                                <i class="fas fa-home"></i> 返回首页
                             </button>
                         </div>
                     `;
                 }
             })
             .catch(error => {
-                console.error('加载产品数据失败:', error);
+                console.error('Failed to load product data:', error);
                 document.getElementById('product-container').innerHTML = `
-                    <a href="../index.html" class="back-button" style="display: inline-flex; align-items: center; margin-bottom: 20px; color: var(--primary-color); text-decoration: none;">
-                        <i class="fas fa-arrow-left" style="margin-right: 8px;"></i> 返回列表
-                    </a>
-                    <div style="text-align: center; padding: 60px; background: var(--card-bg); border-radius: 16px; box-shadow: var(--shadow-md); border: 1px solid #ef4444;">
-                        <i class="fas fa-exclamation-triangle" style="font-size: 64px; color: #ef4444; margin-bottom: 24px;"></i>
-                        <h3 style="font-size: 24px; margin-bottom: 12px; color: var(--text-color);">加载失败</h3>
-                        <p style="color: var(--text-secondary); font-size: 16px; margin-bottom: 8px;">抱歉，加载产品数据时出现错误</p>
-                        <p style="color: var(--text-secondary); font-size: 14px; margin-bottom: 24px;">请稍后再试或联系管理员</p>
+                    <div class="load-error">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <h3>加载失败</h3>
+                        <p class="error-message">抱歉，加载产品数据时出现错误</p>
+                        <p class="support-message">请稍后再试或联系管理员</p>
                         <div>
-                            <button onclick="window.location.reload()" style="margin-right: 12px; padding: 10px 20px; background: var(--primary-color); color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 600; transition: all 0.3s ease;" onmouseover="this.style.transform='translateY(-3px)';this.style.boxShadow='var(--shadow-lg)';" onmouseout="this.style.transform='translateY(0)';this.style.boxShadow='none';">
-                                <i class="fas fa-sync-alt" style="margin-right: 8px;"></i> 重新加载
+                            <button onclick="window.location.reload()">
+                                <i class="fas fa-sync-alt"></i> 重新加载
                             </button>
-                            <button data-href="../index.html"" style="padding: 10px 20px; background: transparent; color: var(--text-color); border: 1px solid var(--border-color); border-radius: 8px; cursor: pointer; font-weight: 600; transition: all 0.3s ease;" onmouseover="this.style.transform='translateY(-3px)';this.style.boxShadow='var(--shadow-lg)';" onmouseout="this.style.transform='translateY(0)';this.style.boxShadow='none';">
-                                <i class="fas fa-home" style="margin-right: 8px;"></i> 返回首页
+                            <button data-href="../index.html">
+                                <i class="fas fa-home"></i> 返回首页
                             </button>
                         </div>
                     </div>
                 `;
             });
             
-        // 获取规格名称
         function getSpecName(key) {
             const specNames = {
                 'processor': '处理器',
@@ -283,7 +262,6 @@
             return specNames[key] || key;
         }
         
-        // 获取分类名称
         function getCategoryName(category) {
             switch(category) {
                 case 'phone':
@@ -297,7 +275,6 @@
             }
         }
         
-        // 获取分类图标
         function getCategoryIcon(category) {
             switch(category) {
                 case 'phone':

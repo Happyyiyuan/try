@@ -1,7 +1,6 @@
-/* 页脚样式 */
 .site-footer {
     background: var(--card-bg);
-    border-top: 1px solid var(--border-color);
+    border-top: 1px solid var(--footer-border-color);
     padding: var(--spacing-xl) 0;
     margin-top: var(--spacing-2xl);
     border-radius: var(--border-radius-lg) var(--border-radius-lg) 0 0;
@@ -10,9 +9,7 @@
     overflow: hidden;
 }
 
-/* 页脚背景效果 */
 .site-footer::before {
-    content: '';
     position: absolute;
     top: 0;
     left: 0;
@@ -20,6 +17,7 @@
     height: 3px;
     background: linear-gradient(to right, var(--primary-color), var(--secondary-color), var(--accent-color));
     opacity: 0.8;
+    content: '';
 }
 
 .footer-content {
@@ -33,13 +31,13 @@
     z-index: 1;
 }
 
-.footer-section h3 {
-    font-size: 1.1rem;
-    margin-bottom: var(--spacing-md);
-    color: var(--text-color);
-    font-weight: var(--font-weight-semibold);
-    position: relative;
-    padding-bottom: var(--spacing-sm);
+.footer-heading {
+  font-size: var(--font-size-lg);
+  margin-bottom: var(--spacing-md);
+  color: var(--text-color);
+  font-weight: var(--font-weight-semibold);
+  position: relative;
+  padding-bottom: var(--spacing-sm);
 }
 
 .footer-section h3::after {
@@ -48,7 +46,7 @@
     bottom: 0;
     left: 0;
     width: 40px;
-    height: 2px;
+    height: 3px;
     background: linear-gradient(to right, var(--gradient-start), var(--gradient-end));
     transition: width 0.3s ease;
 }
@@ -153,7 +151,7 @@
 
 .footer-logo img {
     height: 40px;
-    margin-right: 12px;
+    margin-right: var(--spacing-sm);
 }
 
 .footer-logo span {
@@ -167,7 +165,6 @@
     padding-top: var(--spacing-xl);
     margin-top: var(--spacing-xl);
     border-top: 1px solid var(--border-color);
-    position: relative;
 }
 
 .footer-bottom p {
@@ -220,47 +217,45 @@
     .footer-content {
         grid-template-columns: repeat(2, 1fr);
     }
-    
+
     .social-icons {
         margin-top: var(--spacing-md);
     }
-    
+
     .back-to-top {
         bottom: var(--spacing-md);
         right: var(--spacing-md);
     }
 }
 
-@media (max-width: 768px) {
-    .site-footer {
-        padding: var(--spacing-lg) 0;
-    }
-    
-    .footer-content {
-        grid-template-columns: 1fr;
-        gap: var(--spacing-lg);
-    }
-    
-    .footer-section {
-        padding-bottom: var(--spacing-lg);
-        border-bottom: 1px solid var(--border-color);
-    }
-    
-    .footer-section:last-child {
-        border-bottom: none;
-    }
-    
-    .social-icons {
-        justify-content: center;
-    }
-    
-    .footer-links {
-        flex-wrap: wrap;
-    }
-    
-    .footer-logo {
-        justify-content: center;
-    }
+.site-footer {
+  padding: var(--spacing-lg) 0;
+}
+
+.footer-content {
+  grid-template-columns: 1fr;
+  gap: var(--spacing-lg);
+}
+
+.footer-section {
+  padding-bottom: var(--spacing-lg);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.footer-section:last-child {
+  border-bottom: none;
+}
+
+.social-icons {
+  justify-content: center;
+}
+
+.footer-links {
+  flex-wrap: wrap;
+}
+
+.footer-logo {
+  justify-content: center;
 }
 
 /* 暗色模式 */
