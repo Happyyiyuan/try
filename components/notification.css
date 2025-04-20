@@ -1,0 +1,147 @@
+/**
+ * notification.css - 通知提示组件样式
+ * 使用网站的CSS变量保持风格一致性
+ */
+
+.notification-container {
+  position: fixed;
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-width: 350px;
+}
+
+/* 位置变体 */
+.notification-container.top-right {
+  top: 20px;
+  right: 20px;
+}
+
+.notification-container.top-left {
+  top: 20px;
+  left: 20px;
+}
+
+.notification-container.bottom-right {
+  bottom: 20px;
+  right: 20px;
+  flex-direction: column-reverse;
+}
+
+.notification-container.bottom-left {
+  bottom: 20px;
+  left: 20px;
+  flex-direction: column-reverse;
+}
+
+.notification {
+  padding: 16px;
+  border-radius: var(--border-radius-md);
+  box-shadow: var(--shadow-lg);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  animation: slide-in 0.3s ease forwards;
+  position: relative;
+  min-width: 280px;
+  max-width: 100%;
+  opacity: 1;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+@keyframes slide-in {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+/* 通知类型样式 */
+.notification.success {
+  background-color: var(--success-color);
+  color: white;
+}
+
+.notification.error {
+  background-color: var(--error-color);
+  color: white;
+}
+
+.notification.info {
+  background-color: var(--info-color);
+  color: white;
+}
+
+.notification.warning {
+  background-color: var(--warning-color);
+  color: white;
+}
+
+.notification i {
+  font-size: 1.2rem;
+}
+
+.notification-message {
+  flex: 1;
+  font-size: 0.95rem;
+  line-height: 1.4;
+}
+
+.notification-close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: transparent;
+  border: none;
+  color: rgba(255, 255, 255, 0.8);
+  cursor: pointer;
+  font-size: 0.8rem;
+  transition: var(--transition-base);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+}
+
+.notification-close:hover {
+  color: white;
+  background-color: rgba(255, 255, 255, 0.2);
+  transform: scale(1.1);
+}
+
+/* 暗黑模式适配 */
+.dark-theme .notification.success {
+  background-color: var(--success-color);
+}
+
+.dark-theme .notification.error {
+  background-color: var(--error-color);
+}
+
+.dark-theme .notification.info {
+  background-color: var(--info-color);
+}
+
+.dark-theme .notification.warning {
+  background-color: var(--warning-color);
+}
+
+/* 响应式调整 */
+@media (max-width: 480px) {
+  .notification-container {
+    max-width: calc(100% - 40px);
+    width: calc(100% - 40px);
+  }
+  
+  .notification {
+    min-width: auto;
+    width: 100%;
+  }
+}

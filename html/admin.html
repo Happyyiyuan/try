@@ -1,0 +1,859 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>管理员审核 - AI科技知识库</title>
+    <link rel="stylesheet" href="../public/css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="icon" href="https://cdn-icons-png.flaticon.com/512/2103/2103652.png" type="image/png">
+    <script src="../public/js/main.js" defer></script>
+    <script src="../public/js/auth.js" defer></script>
+    <script src="../public/js/admin.js" defer></script>
+    <style>
+        /* Loading and Error States */
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.6);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            backdrop-filter: blur(4px);
+            transition: var(--transition-smooth);
+        }
+
+        .loading-spinner {
+            width: 50px;
+            height: 50px;
+            border: 3px solid rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            border-top-color: var(--primary-color);
+            box-shadow: 0 0 20px rgba(99, 102, 241, 0.5);
+            animation: spin 1s cubic-bezier(0.68, -0.55, 0.265, 1.55) infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .error-message {
+            background: var(--error-bg);
+            color: var(--error-color);
+            padding: var(--spacing-md);
+            border-radius: var(--border-radius-md);
+            margin-bottom: var(--spacing-lg);
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-md);
+        }
+
+        .success-message {
+            background: var(--success-bg);
+            color: var(--success-color);
+            padding: var(--spacing-md);
+            border-radius: var(--border-radius-md);
+            margin-bottom: var(--spacing-lg);
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-md);
+        }
+
+        .admin-container {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+
+        .admin-actions {
+            display: flex;
+            gap: var(--spacing-md);
+            margin-bottom: var(--spacing-xl);
+        }
+
+        .action-button {
+            padding: 8px 16px;
+            border-radius: var(--border-radius-md);
+            font-weight: var(--font-weight-medium);
+            cursor: pointer;
+            transition: var(--transition-base);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            border: 1px solid var(--border-color);
+            background: var(--card-bg);
+            color: var(--text-color);
+        }
+
+        .action-button:hover {
+            background: var(--bg-hover);
+            border-color: var(--primary-color);
+        }
+
+        .action-button i {
+            font-size: 14px;
+        }
+
+        .status-filter {
+            position: relative;
+            display: inline-block;
+        }
+
+        .status-dropdown {
+            padding: 8px;
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius-md);
+            background: var(--card-bg);
+            min-width: 150px;
+        }
+
+        .btn-primary {
+            width: 100%;
+            background: linear-gradient(to right, var(--gradient-start), var(--gradient-end));
+            color: white;
+            border: none;
+            border-radius: var(--border-radius-md);
+            padding: 12px 24px;
+            font-size: 16px;
+            font-weight: var(--font-weight-medium);
+            cursor: pointer;
+            transition: var(--transition-base);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .btn-primary i {
+            margin-right: 8px;
+        }
+
+        .admin-panel {
+            display: flex;
+            flex-direction: column;
+            gap: var(--spacing-lg);
+            padding: var(--spacing-xl);
+            background: var(--bg-color);
+            border-radius: var(--border-radius-lg);
+            box-shadow: var(--shadow-md);
+        }
+
+        .admin-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: var(--spacing-xl);
+        }
+
+        .admin-stats {
+            display: flex;
+            gap: var(--spacing-lg);
+            margin-bottom: var(--spacing-xl);
+        }
+
+        .stat-card {
+            flex: 1;
+            background: var(--card-bg);
+            border-radius: var(--border-radius-md);
+            padding: var(--spacing-lg);
+            box-shadow: var(--shadow-sm);
+            display: flex;
+            align-items: center;
+            transition: var(--transition-smooth);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-md);
+        }
+        
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.03) 0%, rgba(99, 102, 241, 0) 100%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            pointer-events: none;
+        }
+        
+        .stat-card:hover::before {
+            opacity: 1;
+        }
+
+        .stat-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: var(--spacing-md);
+            font-size: 20px;
+            color: white;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .stat-icon::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.2) 0%, rgba(255, 255, 255, 0) 80%);
+        }
+
+        .stat-pending {
+            background: var(--warning-color);
+        }
+
+        .stat-approved {
+            background: var(--success-color);
+        }
+
+        .stat-rejected {
+            background: var(--accent-color);
+        }
+
+        .stat-info h3 {
+            margin: 0;
+            font-size: 24px;
+            font-weight: var(--font-weight-bold);
+        }
+
+        .stat-info p {
+            margin: 4px 0 0;
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+
+        .filter-tabs {
+            display: flex;
+            margin-bottom: var(--spacing-lg);
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .filter-tab {
+            padding: var(--spacing-md) var(--spacing-lg);
+            cursor: pointer;
+            color: var(--text-secondary);
+            font-weight: var(--font-weight-medium);
+            position: relative;
+            transition: var(--transition-base);
+        }
+
+        .filter-tab:hover {
+            color: var(--primary-color);
+        }
+
+        .filter-tab.active {
+            color: var(--primary-color);
+        }
+
+        .filter-tab.active::after {
+            content: '';
+            position: absolute;
+            bottom: -1px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(to right, var(--gradient-start), var(--gradient-end));
+            box-shadow: 0 1px 3px rgba(99, 102, 241, 0.3);
+            animation: slideIn 0.3s ease-out forwards;
+        }
+        
+        @keyframes slideIn {
+            from { transform: scaleX(0); opacity: 0; }
+            to { transform: scaleX(1); opacity: 1; }
+        }
+
+        .submissions-container {
+            margin-bottom: var(--spacing-xl);
+            position: relative;
+        }
+
+        .bulk-actions {
+            position: absolute;
+            bottom: 100%;
+            left: 0;
+            right: 0;
+            background: var(--card-bg);
+            padding: var(--spacing-md);
+            border-radius: var(--border-radius-md);
+            box-shadow: var(--shadow-md);
+            display: none;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: var(--spacing-md);
+            z-index: 10;
+        }
+
+        .bulk-actions.visible {
+            display: flex;
+        }
+
+        .bulk-actions-left {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-md);
+        }
+
+        .bulk-actions-right {
+            display: flex;
+            gap: var(--spacing-md);
+        }
+
+        .submission-select {
+            position: absolute;
+            top: var(--spacing-md);
+            left: var(--spacing-md);
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+            z-index: 1;
+        }
+
+        .submission-card {
+            background: var(--card-bg);
+            border-radius: var(--border-radius-md);
+            padding: var(--spacing-lg);
+            margin-bottom: var(--spacing-md);
+            box-shadow: var(--shadow-sm);
+            border-left: 4px solid transparent;
+            transition: var(--transition-smooth);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .submission-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.03) 0%, rgba(99, 102, 241, 0) 100%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            pointer-events: none;
+        }
+
+        .submission-card:hover {
+            box-shadow: var(--shadow-md);
+            transform: translateY(-3px);
+        }
+        
+        .submission-card:hover::before {
+            opacity: 1;
+        }
+
+        .submission-card.pending {
+            border-left-color: var(--warning-color);
+        }
+
+        .submission-card.approved {
+            border-left-color: var(--success-color);
+        }
+
+        .submission-card.rejected {
+            border-left-color: var(--accent-color);
+        }
+
+        .submission-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: var(--spacing-md);
+        }
+
+        .submission-title {
+            margin: 0;
+            font-size: 18px;
+            font-weight: var(--font-weight-semibold);
+        }
+
+        .submission-meta {
+            display: flex;
+            gap: var(--spacing-md);
+            margin-top: 8px;
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+
+        .submission-meta span {
+            display: flex;
+            align-items: center;
+        }
+
+        .submission-meta i {
+            margin-right: 4px;
+        }
+
+        .submission-status {
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: var(--font-weight-medium);
+        }
+
+        .status-pending {
+            background: rgba(245, 158, 11, 0.1);
+            color: var(--warning-color);
+        }
+
+        .status-approved {
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--success-color);
+        }
+
+        .status-rejected {
+            background: rgba(244, 63, 94, 0.1);
+            color: var(--accent-color);
+        }
+
+        .submission-content {
+            margin-bottom: var(--spacing-md);
+            color: var(--text-secondary);
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .submission-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: var(--spacing-md);
+        }
+
+        .submission-tag {
+            padding: 4px 12px;
+            background: rgba(99, 102, 241, 0.1);
+            color: var(--primary-color);
+            border-radius: 12px;
+            font-size: 12px;
+        }
+
+        .submission-actions {
+            display: flex;
+            gap: var(--spacing-sm);
+        }
+
+        .btn-action {
+            padding: 8px 16px;
+            border-radius: var(--border-radius-md);
+            font-size: 14px;
+            font-weight: var(--font-weight-medium);
+            cursor: pointer;
+            transition: var(--transition-smooth);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border: none;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .btn-action::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            transform: translate(-50%, -50%) scale(0);
+            opacity: 0;
+            transition: transform 0.5s, opacity 0.3s;
+        }
+
+        .btn-action i {
+            margin-right: 6px;
+        }
+
+        .btn-view {
+            background: rgba(59, 130, 246, 0.1);
+            color: var(--info-color);
+        }
+
+        .btn-view:hover {
+            background: rgba(59, 130, 246, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .btn-approve {
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--success-color);
+        }
+
+        .btn-approve:hover {
+            background: rgba(16, 185, 129, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .btn-reject {
+            background: rgba(244, 63, 94, 0.1);
+            color: var(--accent-color);
+        }
+
+        .btn-reject:hover {
+            background: rgba(244, 63, 94, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .btn-edit {
+            background: rgba(245, 158, 11, 0.1);
+            color: var(--warning-color);
+        }
+
+        .btn-edit:hover {
+            background: rgba(245, 158, 11, 0.2);
+            transform: translateY(-2px);
+        }
+        
+        .btn-action:active::after {
+            transform: translate(-50%, -50%) scale(2);
+            opacity: 0;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            z-index: 1000;
+            overflow-y: auto;
+            backdrop-filter: blur(4px);
+            transition: var(--transition-smooth);
+        }
+
+        .modal-content {
+            background: var(--card-bg);
+            border-radius: var(--border-radius-lg);
+            max-width: 800px;
+            margin: 40px auto;
+            box-shadow: var(--shadow-xl);
+            position: relative;
+            transform: translateY(20px);
+            opacity: 0;
+            animation: modalFadeIn 0.4s forwards;
+        }
+        
+        @keyframes modalFadeIn {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .modal-header {
+            padding: var(--spacing-lg) var(--spacing-xl);
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-title {
+            margin: 0;
+            font-size: 20px;
+            font-weight: var(--font-weight-semibold);
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 20px;
+            cursor: pointer;
+            color: var(--text-secondary);
+            transition: var(--transition-base);
+        }
+
+        .modal-close:hover {
+            color: var(--accent-color);
+        }
+
+        .modal-body {
+            padding: var(--spacing-xl);
+        }
+
+        .modal-footer {
+            padding: var(--spacing-lg) var(--spacing-xl);
+            border-top: 1px solid var(--border-color);
+            display: flex;
+            justify-content: flex-end;
+            gap: var(--spacing-md);
+        }
+
+        .submission-detail-header {
+            margin-bottom: var(--spacing-lg);
+        }
+
+        .submission-detail-title {
+            margin: 0 0 var(--spacing-sm);
+            font-size: 24px;
+            font-weight: var(--font-weight-bold);
+        }
+
+        .submission-detail-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: var(--spacing-md);
+            color: var(--text-secondary);
+            font-size: 14px;
+            margin-bottom: var(--spacing-md);
+        }
+
+        .submission-detail-meta span {
+            display: flex;
+            align-items: center;
+        }
+
+        .submission-detail-meta i {
+            margin-right: 6px;
+        }
+
+        .submission-detail-image {
+            width: 100%;
+            max-height: 400px;
+            object-fit: contain;
+            border-radius: var(--border-radius-md);
+            margin-bottom: var(--spacing-lg);
+            background: var(--bg-color);
+        }
+
+        .submission-detail-content {
+            margin-bottom: var(--spacing-lg);
+            line-height: 1.6;
+        }
+
+        .submission-detail-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: var(--spacing-lg);
+        }
+
+        .submission-detail-tag {
+            padding: 6px 14px;
+            background: rgba(99, 102, 241, 0.1);
+            color: var(--primary-color);
+            border-radius: 16px;
+            font-size: 14px;
+        }
+
+        .feedback-form {
+            margin-top: var(--spacing-lg);
+            padding-top: var(--spacing-lg);
+            border-top: 1px solid var(--border-color);
+        }
+
+        .feedback-form label {
+            display: block;
+            margin-bottom: var(--spacing-sm);
+            font-weight: var(--font-weight-medium);
+        }
+
+        .feedback-form textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius-md);
+            background: var(--bg-color);
+            color: var(--text-color);
+            min-height: 100px;
+            margin-bottom: var(--spacing-md);
+        }
+
+        .no-submissions {
+            text-align: center;
+            padding: var(--spacing-xl);
+            color: var(--text-secondary);
+        }
+
+        .no-submissions i {
+            font-size: 48px;
+            margin-bottom: var(--spacing-md);
+            opacity: 0.5;
+        }
+
+        .logout-btn {
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            font-size: 14px;
+            transition: var(--transition-base);
+        }
+
+        .logout-btn:hover {
+            color: var(--accent-color);
+        }
+
+        .logout-btn i {
+            margin-right: 6px;
+        }
+
+        @media (max-width: 768px) {
+            .admin-stats {
+                flex-direction: column;
+            }
+
+            .submission-header {
+                flex-direction: column;
+            }
+
+            .submission-actions {
+                margin-top: var(--spacing-md);
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="/public/css/sidebar-enhancements.css">
+</head>
+
+<body>
+    <div id="loading-overlay" class="loading-overlay" style="display: none;">
+        <div class="loading-spinner"></div>
+    </div>
+
+    <div id="message-container"></div>
+
+    <div class="container">
+        <aside class="sidebar">
+            <div class="logo-container">
+                <div class="logo-text">
+                    <i class="fas fa-microchip"></i>
+                    <h2>AI科技库</h2>
+                </div>
+                <button id="theme-toggle">
+                    <i class="fas fa-moon"></i>
+                </button>
+            </div>
+            
+            <div class="category-nav">
+                <h3 class="section-title">管理导航</h3>
+                <button data-href="../index.html""><i class="fas fa-home"></i> 返回首页</button>
+                <button class="active"><i class="fas fa-tasks"></i> 内容审核</button>
+                <button onclick="showTab('pending')"><i class="fas fa-clock"></i> 待审核</button>
+                <button onclick="showTab('approved')"><i class="fas fa-check-circle"></i> 已通过</button>
+                <button onclick="showTab('rejected')"><i class="fas fa-times-circle"></i> 已拒绝</button>
+            </div>
+            
+            <div class="tags-container">
+                <h3 class="section-title">快捷操作</h3>
+                <button id="logout-btn" class="logout-btn">
+                    <i class="fas fa-sign-out-alt"></i> 退出登录
+                </button>
+            </div>
+        </aside>
+        
+        <main class="main-content">
+            <!-- 管理员面板 -->
+            <div id="admin-panel" class="admin-panel">
+                <div class="admin-header">
+                    <div>
+                        <h1 class="main-title">内容审核管理</h1>
+                        <p class="subtitle">审核、编辑和发布用户提交的内容</p>
+                    </div>
+                </div>
+                
+                <div class="admin-stats">
+                    <div class="stat-card">
+                        <div class="stat-icon stat-pending">
+                            <i class="fas fa-clock"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3 id="pending-count">0</h3>
+                            <p>待审核</p>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-icon stat-approved">
+                            <i class="fas fa-check"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3 id="approved-count">0</h3>
+                            <p>已通过</p>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-icon stat-rejected">
+                            <i class="fas fa-times"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3 id="rejected-count">0</h3>
+                            <p>已拒绝</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="filter-tabs">
+                    <div class="filter-tab active" data-tab="pending">待审核</div>
+                    <div class="filter-tab" data-tab="approved">已通过</div>
+                    <div class="filter-tab" data-tab="rejected">已拒绝</div>
+                    <div class="filter-tab" data-tab="all">全部</div>
+                </div>
+                
+                <div id="submissions-container" class="submissions-container">
+                    <!-- 内容将通过JavaScript动态加载 -->
+                </div>
+            </div>
+            
+            <!-- 内容详情模态框 -->
+            <div id="detail-modal" class="modal">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h3 class="modal-title">内容详情</h3>
+                        <button class="modal-close" onclick="closeModal()">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                    <div class="modal-body" id="detail-content">
+                        <!-- 内容详情将通过JavaScript动态加载 -->
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn-action btn-reject" id="modal-reject-btn">
+                            <i class="fas fa-times"></i> 拒绝
+                        </button>
+                        <button class="btn-action btn-edit" id="modal-edit-btn">
+                            <i class="fas fa-edit"></i> 编辑并发布
+                        </button>
+                        <button class="btn-action btn-approve" id="modal-approve-btn">
+                            <i class="fas fa-check"></i> 通过并发布
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+    <script src="../public/js/sidebar-unifier.js" defer></script>
+</body>
+
+</html>

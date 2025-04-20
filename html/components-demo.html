@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>组件展示 - AI科技知识库</title>
+    <link rel="stylesheet" href="/public/css/styles.css">
+    <link rel="stylesheet" href="components/avatar-uploader.css">
+    <link rel="stylesheet" href="components/notification.css">
+    <link rel="stylesheet" href="components/community-interaction.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="icon" href="https://cdn-icons-png.flaticon.com/512/2103/2103652.png" type="image/png">
+    <script src="../public/js/main.js" defer></script>
+    <script src="../public/js/auth.js" defer></script>
+    <script src="components/avatar-uploader.js" defer></script>
+    <script src="components/notification.js" defer></script>
+    <script src="components/theme-switcher.js" defer></script>
+    <script src="components/community-interaction.js" defer></script>
+    <style>
+        .demo-section {
+            margin-bottom: var(--spacing-2xl);
+            padding: var(--spacing-xl);
+            background: var(--card-bg);
+            border-radius: var(--border-radius-lg);
+            box-shadow: var(--shadow-md);
+        }
+
+        .demo-title {
+            font-size: 1.5rem;
+            margin-bottom: var(--spacing-lg);
+            padding-bottom: var(--spacing-sm);
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .demo-title i {
+            color: var(--primary-color);
+        }
+
+        .demo-description {
+            margin-bottom: var(--spacing-lg);
+            color: var(--text-secondary);
+        }
+
+        .demo-controls {
+            display: flex;
+            gap: var(--spacing-md);
+            margin-bottom: var(--spacing-lg);
+            flex-wrap: wrap;
+        }
+
+        .demo-btn {
+            padding: 8px 16px;
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: var(--border-radius-md);
+            cursor: pointer;
+            transition: var(--transition-base);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .demo-btn:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .demo-content {
+            padding: var(--spacing-lg);
+            background: var(--bg-secondary);
+            border-radius: var(--border-radius-md);
+        }
+
+        .article-content {
+            padding: var(--spacing-lg);
+            background: var(--bg-secondary);
+            border-radius: var(--border-radius-md);
+            margin-bottom: var(--spacing-lg);
+        }
+
+        .article-title {
+            font-size: 1.2rem;
+            margin-bottom: var(--spacing-md);
+        }
+
+        .article-text {
+            margin-bottom: var(--spacing-md);
+            line-height: 1.6;
+        }
+    </style>
+    <link rel="stylesheet" href="/public/css/sidebar-enhancements.css">
+</head>
+
+<body>
+    <div class="container">
+        <aside class="sidebar">
+            <div class="logo-container">
+                <div class="logo-text">
+                    <i class="fas fa-microchip"></i>
+                    <h2>AI科技库</h2>
+                </div>
+                <button id="theme-toggle">
+                    <i class="fas fa-moon"></i>
+                </button>
+            </div>
+            
+            <div class="category-nav">
+                <h3 class="section-title">导航</h3>
+                <button data-href="../index.html""><i class="fas fa-home"></i> 返回首页</button>
+                <button class="active"><i class="fas fa-puzzle-piece"></i> 组件展示</button>
+                <button data-href="/profile.html""><i class="fas fa-user"></i> 个人中心</button>
+            </div>
+            
+            <div class="category-nav">
+                <h3 class="section-title">组件导航</h3>
+                <button onclick="scrollToSection('avatar-uploader-demo')"><i class="fas fa-user-circle"></i> 头像上传</button>
+                <button onclick="scrollToSection('notification-demo')"><i class="fas fa-bell"></i> 通知提示</button>
+                <button onclick="scrollToSection('theme-switcher-demo')"><i class="fas fa-adjust"></i> 主题切换</button>
+                <button onclick="scrollToSection('community-interaction-demo')"><i class="fas fa-comments"></i> 社区互动</button>
+            </div>
+        </aside>
+        
+        <main class="main-content">
+            <div class="header-section">
+                <div class="header-content">
+                    <div>
+                        <h1 class="main-title">组件展示</h1>
+                        <p class="subtitle">展示AI科技知识库的各种UI组件和交互功能</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 头像上传组件演示 -->
+            <section id="avatar-uploader-demo" class="demo-section">
+                <h2 class="demo-title"><i class="fas fa-user-circle"></i> 头像上传组件</h2>
+                <p class="demo-description">支持拖放上传、预览和裁剪功能的头像上传组件。</p>
+                
+                <div class="demo-content">
+                    <div class="avatar-upload-container"></div>
+                </div>
+            </section>
+
+            <!-- 通知组件演示 -->
+            <section id="notification-demo" class="demo-section">
+                <h2 class="demo-title"><i class="fas fa-bell"></i> 通知提示组件</h2>
+                <p class="demo-description">用于显示操作成功、错误、警告和信息提示的通知组件。</p>
+                
+                <div class="demo-controls">
+                    <button class="demo-btn" id="show-success-notification">
+                        <i class="fas fa-check-circle"></i> 显示成功通知
+                    </button>
+                    <button class="demo-btn" id="show-error-notification">
+                        <i class="fas fa-exclamation-circle"></i> 显示错误通知
+                    </button>
+                    <button class="demo-btn" id="show-warning-notification">
+                        <i class="fas fa-exclamation-triangle"></i> 显示警告通知
+                    </button>
+                    <button class="demo-btn" id="show-info-notification">
+                        <i class="fas fa-info-circle"></i> 显示信息通知
+                    </button>
+                </div>
+            </section>
+
+            <!-- 主题切换组件演示 -->
+            <section id="theme-switcher-demo" class="demo-section">
+                <h2 class="demo-title"><i class="fas fa-adjust"></i> 主题切换组件</h2>
+                <p class="demo-description">提供浅色/深色主题切换功能的组件。</p>
+                
+                <div class="demo-controls">
+                    <button class="demo-btn" id="toggle-theme-btn">
+                        <i class="fas fa-moon"></i> 切换主题
+                    </button>
+                </div>
+                
+                <div class="demo-content">
+                    <p>当前主题: <span id="current-theme">浅色</span></p>
+                    <p>主题切换组件会自动保存用户的主题偏好，并在页面加载时应用。</p>
+                </div>
+            </section>
+
+            <!-- 社区互动组件演示 -->
+            <section id="community-interaction-demo" class="demo-section">
+                <h2 class="demo-title"><i class="fas fa-comments"></i> 社区互动组件</h2>
+                <p class="demo-description">提供评论、点赞、收藏等社区互动功能的组件。</p>
+                
+                <div class="article-content" data-post-id="demo-post-1">
+                    <h3 class="article-title">生成式AI的发展与应用</h3>
+                    <p class="article-text">生成式AI技术在近年来取得了突破性进展，特别是大型语言模型（LLM）如GPT系列、Claude和Llama等的出现，彻底改变了人们与AI交互的方式。这些模型能够生成高质量的文本、图像、音频和视频内容，为创意产业、教育、医疗等领域带来了革命性的变化。</p>
+                    <p class="article-text">然而，生成式AI也带来了一系列挑战，包括内容真实性验证、版权问题、就业影响等。如何负责任地开发和使用这些技术，将成为未来社会需要共同面对的重要议题。</p>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script>
+        // 页面滚动到指定区域
+        function scrollToSection(sectionId) {
+            const section = document.getElementById(sectionId);
+            if (section) {
+                section.scrollIntoView({ behavior: 'smooth' });
+            }
+        }
+
+        // 通知组件演示
+        document.addEventListener('DOMContentLoaded', function() {
+            // 成功通知
+            document.getElementById('show-success-notification').addEventListener('click', function() {
+                if (window.notifications) {
+                    window.notifications.success('操作已成功完成！');
+                }
+            });
+            
+            // 错误通知
+            document.getElementById('show-error-notification').addEventListener('click', function() {
+                if (window.notifications) {
+                    window.notifications.error('操作失败，请稍后重试。');
+                }
+            });
+            
+            // 警告通知
+            document.getElementById('show-warning-notification').addEventListener('click', function() {
+                if (window.notifications) {
+                    window.notifications.warning('请注意，此操作不可撤销。');
+                }
+            });
+            
+            // 信息通知
+            document.getElementById('show-info-notification').addEventListener('click', function() {
+                if (window.notifications) {
+                    window.notifications.info('系统将于今晚10点进行维护。');
+                }
+            });
+
+            // 主题切换演示
+            const toggleThemeBtn = document.getElementById('toggle-theme-btn');
+            const currentThemeText = document.getElementById('current-theme');
+            
+            // 更新当前主题显示
+            function updateThemeDisplay() {
+                if (document.body.classList.contains('dark-theme')) {
+                    currentThemeText.textContent = '深色';
+                    toggleThemeBtn.querySelector('i').className = 'fas fa-sun';
+                } else {
+                    currentThemeText.textContent = '浅色';
+                    toggleThemeBtn.querySelector('i').className = 'fas fa-moon';
+                }
+            }
+            
+            // 初始更新
+            updateThemeDisplay();
+            
+            // 切换主题按钮
+            toggleThemeBtn.addEventListener('click', function() {
+                document.body.classList.toggle('dark-theme');
+                updateThemeDisplay();
+                
+                // 保存主题设置
+                const theme = document.body.classList.contains('dark-theme') ? 'dark' : 'light';
+                localStorage.setItem('ai_tech_theme', theme);
+                
+                // 显示通知
+                if (window.notifications) {
+                    window.notifications.info(`已切换到${theme === 'dark' ? '深色' : '浅色'}主题`);
+                }
+            });
+        });
+    </script>
+    <script src="../public/js/sidebar-unifier.js" defer></script>
+</body>
+
+</html>

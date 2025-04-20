@@ -1,0 +1,221 @@
+/**
+ * avatar-uploader.css - 用户头像上传组件样式
+ * 使用网站的CSS变量保持风格一致性
+ */
+
+.avatar-uploader-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-md);
+  width: 100%;
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+.avatar-preview {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid var(--primary-color);
+  box-shadow: var(--shadow-md);
+  transition: var(--transition-base);
+}
+
+.avatar-drop-zone {
+  width: 100%;
+  height: 160px;
+  border: 2px dashed var(--border-color);
+  border-radius: var(--border-radius-md);
+  background-color: var(--bg-secondary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: var(--transition-base);
+}
+
+.avatar-drop-zone:hover {
+  border-color: var(--primary-color);
+  background-color: rgba(99, 102, 241, 0.05);
+}
+
+.avatar-drop-zone.drag-over {
+  border-color: var(--primary-color);
+  background-color: rgba(99, 102, 241, 0.1);
+  transform: scale(1.02);
+}
+
+.drop-zone-content {
+  text-align: center;
+  padding: var(--spacing-md);
+  color: var(--text-secondary);
+}
+
+.drop-zone-content i {
+  font-size: 2rem;
+  color: var(--primary-color);
+  margin-bottom: var(--spacing-sm);
+}
+
+.file-info {
+  font-size: 0.8rem;
+  margin-top: var(--spacing-sm);
+  color: var(--text-tertiary);
+}
+
+.avatar-upload-progress {
+  width: 100%;
+  margin-top: var(--spacing-sm);
+}
+
+.progress-bar {
+  height: 8px;
+  background-color: var(--bg-secondary);
+  border-radius: 4px;
+  overflow: hidden;
+  margin-bottom: var(--spacing-xs);
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(to right, var(--primary-light), var(--primary-color));
+  width: 0%;
+  transition: width 0.3s ease;
+}
+
+.progress-text {
+  text-align: right;
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+}
+
+.avatar-upload-btn {
+  background: var(--primary-color);
+  color: white;
+  border: none;
+  border-radius: var(--border-radius-md);
+  padding: 10px 20px;
+  font-size: 0.9rem;
+  font-weight: var(--font-weight-medium);
+  cursor: pointer;
+  transition: var(--transition-base);
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.avatar-upload-btn:hover {
+  background: var(--primary-dark);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.avatar-upload-btn i {
+  font-size: 1rem;
+}
+
+.avatar-upload-error {
+  width: 100%;
+  padding: var(--spacing-sm) var(--spacing-md);
+  background-color: rgba(239, 68, 68, 0.1);
+  color: var(--error-color);
+  border-radius: var(--border-radius-md);
+  margin-top: var(--spacing-sm);
+  text-align: center;
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* 裁剪器样式 */
+.avatar-cropper-container {
+  width: 100%;
+  display: none;
+  flex-direction: column;
+  gap: var(--spacing-md);
+  padding: var(--spacing-md);
+  background: var(--card-bg);
+  border-radius: var(--border-radius-md);
+  box-shadow: var(--shadow-md);
+}
+
+.cropper-preview {
+  width: 100%;
+  height: 300px;
+  background: var(--bg-secondary);
+  position: relative;
+  overflow: hidden;
+}
+
+.cropper-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-sm);
+  justify-content: center;
+  margin-top: var(--spacing-md);
+}
+
+.cropper-controls button {
+  padding: 8px 12px;
+  border: none;
+  border-radius: var(--border-radius-sm);
+  background: var(--bg-secondary);
+  color: var(--text-color);
+  cursor: pointer;
+  transition: var(--transition-base);
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.cropper-controls button:hover {
+  background: var(--primary-color);
+  color: white;
+}
+
+.btn-crop-apply {
+  background: var(--primary-color) !important;
+  color: white !important;
+  padding: 8px 16px !important;
+}
+
+.btn-crop-cancel {
+  background: var(--bg-secondary) !important;
+  color: var(--text-color) !important;
+  padding: 8px 16px !important;
+}
+
+/* 暗黑模式适配 */
+.dark-theme .avatar-drop-zone {
+  background-color: var(--bg-secondary);
+}
+
+.dark-theme .avatar-drop-zone:hover,
+.dark-theme .avatar-drop-zone.drag-over {
+  background-color: rgba(99, 102, 241, 0.15);
+}
+
+/* 响应式调整 */
+@media (max-width: 768px) {
+  .avatar-uploader-container {
+    max-width: 100%;
+  }
+  
+  .avatar-preview {
+    width: 100px;
+    height: 100px;
+  }
+  
+  .avatar-drop-zone {
+    height: 120px;
+  }
+  
+  .cropper-preview {
+    height: 250px;
+  }
+}

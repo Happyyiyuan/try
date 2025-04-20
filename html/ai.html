@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI技术知识库</title>
+    <link rel="stylesheet" href="/public/css/styles.css">
+    <link rel="stylesheet" href="/public/css/sidebar-enhancements.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="icon" href="https://cdn-icons-png.flaticon.com/512/2103/2103652.png" type="image/png">
+    <script src="../public/js/config.js"></script>
+    <script src="../public/js/main.js" defer></script>
+    <script src="../public/js/sidebar-loader.js" defer></script>
+    <meta name="description" content="AI技术知识库 - 了解人工智能最新发展、应用案例和技术趋势">
+    <meta name="keywords" content="人工智能,AI,深度学习,机器学习,神经网络,自然语言处理,计算机视觉">
+    <meta name="author" content="AI科技库团队">
+    <script src="../public/js/main.js" defer></script>
+    <script src="../public/js/seo-meta-tags.js" defer></script>
+    <script src="../public/js/analytics.js" defer></script>
+    <style>
+        .ai-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 24px;
+            margin-top: 32px;
+        }
+        
+        .ai-card {
+            position: relative;
+            border-radius: var(--border-radius-lg);
+            overflow: hidden;
+            transition: all 0.4s ease;
+            box-shadow: var(--shadow-md);
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+        }
+        
+        .ai-card:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--shadow-lg);
+            border-color: var(--primary-color);
+        }
+        
+        .ai-card-image {
+            height: 180px;
+            background-size: cover;
+            background-position: center;
+            position: relative;
+        }
+        
+        .ai-card-image::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to bottom, rgba(0,0,0,0.1), rgba(0,0,0,0.6));
+        }
+        
+        .ai-card-badge {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            color: white;
+            background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            z-index: 1;
+        }
+        
+        .ai-card-content {
+            padding: 24px;
+        }
+        
+        .ai-card-title {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: var(--text-color);
+        }
+        
+        .ai-card-description {
+            color: var(--text-secondary);
+            margin-bottom: 16px;
+            line-height: 1.6;
+        }
+        
+        .ai-card-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 16px;
+        }
+        
+        .ai-card-tag {
+            padding: 4px 10px;
+            border-radius: 16px;
+            font-size: 12px;
+            background: rgba(99, 102, 241, 0.1);
+            color: var(--primary-color);
+        }
+        
+        .ai-card-link {
+            display: inline-flex;
+            align-items: center;
+            color: var(--primary-color);
+            font-weight: 600;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+        
+        .ai-card-link i {
+            margin-left: 6px;
+            transition: transform 0.3s ease;
+        }
+        
+        .ai-card-link:hover i {
+            transform: translateX(4px);
+        }
+        
+        .ai-timeline {
+            position: relative;
+            margin: 40px 0;
+            padding-left: 30px;
+        }
+        
+        .ai-timeline::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 4px;
+            height: 100%;
+            background: linear-gradient(to bottom, var(--gradient-start), var(--gradient-end));
+            border-radius: 4px;
+        }
+        
+        .ai-timeline-item {
+            position: relative;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: var(--card-bg);
+            border-radius: var(--border-radius-md);
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--border-color);
+            transition: all 0.3s ease;
+        }
+        
+        .ai-timeline-item:hover {
+            transform: translateX(5px);
+            box-shadow: var(--shadow-md);
+            border-color: var(--primary-color);
+        }
+        
+        .ai-timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -34px;
+            top: 24px;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: var(--gradient-end);
+            border: 3px solid var(--card-bg);
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.3);
+            z-index: 1;
+        }
+        
+        .ai-timeline-year {
+            display: inline-block;
+            padding: 4px 10px;
+            background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
+            color: white;
+            border-radius: 16px;
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+        
+        .ai-timeline-title {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+        
+        .ai-timeline-description {
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <aside class="sidebar">
+            <div class="logo-container">
+                <div class="logo-text">
+                    <i class="fas fa-microchip"></i>
+                    <h2>AI科技库</h2>
+                </div>
+                <button id="theme-toggle">
+                    <i class="fas fa-moon"></i>
+                </button>
+            </div>
+            
+            <div class="category-nav">
+                <h3 class="section-title">分类导航</h3>
+                <button data-href="../index.html"><i class="fas fa-th-large"></i> 全部内容</button>
+                <button data-href="phone.html"><i class="fas fa-mobile-alt"></i> 手机科技</button>
+                <button data-href="computer.html"><i class="fas fa-laptop"></i> 电脑配件</button>
+                <button data-href="digital.html"><i class="fas fa-headphones"></i> 数码产品</button>
+                <button class="active"><i class="fas fa-microchip"></i> AI技术</button>
+                <button data-href="ml.html"><i class="fas fa-robot"></i> 机器学习</button>
+                <button data-href="deep-learning.html"><i class="fas fa-brain"></i> 深度学习</button>
+            </div>
+            
+            <div class="tags-container">
+                <h3 class="section-title">热门标签</h3>
+                <div class="tags-wrapper">
+                    <span class="tag">#人工智能</span>
+                    <span class="tag">#深度学习</span>
+                    <span class="tag">#神经网络</span>
+                    <span class="tag">#大语言模型</span>
+                    <span class="tag">#计算机视觉</span>
+                    <span class="tag">#自然语言处理</span>
+                </div>
+            </div>
+        </aside>
+        
+        <main class="main-content">
+            <div class="header-section">
+                <div class="header-content">
+                    <div>
+                        <h1 class="main-title">AI技术知识库</h1>
+                        <p class="subtitle">探索人工智能领域的前沿技术、研究成果和应用案例</p>
+                    </div>
+                    <div class="search-container">
+                        <input type="text" placeholder="搜索AI技术...">
+                        <i class="fas fa-search"></i>
+                    </div>
+                </div>
+            </div>
+            
+            <section class="featured-section">
+                <h2 class="section-title">
+                    <i class="fas fa-star"></i> 热门AI技术
+                    <span class="section-subtitle">最受关注的人工智能技术</span>
+                </h2>
+                
+                <div class="ai-grid">
+                    <div class="ai-card">
+                        <div class="ai-card-image" style="background-image: url('https://images.unsplash.com/photo-1677442135136-760c813a743d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1632&q=80');"></div>
+                        <div class="ai-card-badge">热门</div>
+                        <div class="ai-card-content">
+                            <h3 class="ai-card-title">大型语言模型 (LLM)</h3>
+                            <p class="ai-card-description">基于Transformer架构的大规模语言模型，如GPT、LLaMA和Claude，能够理解和生成人类语言。</p>
+                            <div class="ai-card-tags">
+                                <span class="ai-card-tag">自然语言处理</span>
+                                <span class="ai-card-tag">Transformer</span>
+                                <span class="ai-card-tag">深度学习</span>
+                            </div>
+                            <a href="#" class="ai-card-link">了解更多 <i class="fas fa-arrow-right"></i></a>
+                        </div>
+                    </div>
+                    
+                    <div class="ai-card">
+                        <div class="ai-card-image" style="background-image: url('https://images.unsplash.com/photo-1633412802994-5c058f151b66?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80');"></div>
+                        <div class="ai-card-badge">创新</div>
+                        <div class="ai-card-content">
+                            <h3 class="ai-card-title">生成式AI</h3>
+                            <p class="ai-card-description">能够创建新内容的AI系统，包括文本、图像、音频和视频生成，如DALL-E、Midjourney和Stable Diffusion。</p>
+                            <div class="ai-card-tags">
+                                <span class="ai-card-tag">图像生成</span>
+                                <span class="ai-card-tag">扩散模型</span>
+                                <span class="ai-card-tag">GAN</span>
+                            </div>
+                            <a href="#" class="ai-card-link">了解更多 <i class="fas fa-arrow-right"></i></a>
+                        </div>
+                    </div>
+                    
+                    <div class="ai-card">
+                        <div class="ai-card-image" style="background-image: url('https://images.unsplash.com/photo-1531746790731-6c087fecd65a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1506&q=80');"></div>
+                        <div class="ai-card-badge">应用</div>
+                        <div class="ai-card-content">
+                            <h3 class="ai-card-title">多模态AI</h3>
+                            <p class="ai-card-description">能够处理和理解多种数据类型（文本、图像、音频等）的AI系统，实现跨模态理解和生成。</p>
+                            <div class="ai-card-tags">
+                                <span class="ai-card-tag">跨模态学习</span>
+                                <span class="ai-card-tag">视觉语言模型</span>
+                                <span class="ai-card-tag">多模态融合</span>
+                            </div>
+                            <a href="#" class="ai-card-link">了解更多 <i class="fas fa-arrow-right"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            <section class="ai-history-section">
+                <h2 class="section-title">
+                    <i class="fas fa-history"></i> AI发展历程
+                    <span class="section-subtitle">人工智能的关键里程碑</span>
+                </h2>
+                
+                <div class="ai-timeline">
+                    <div class="ai-timeline-item">
+                        <div class="ai-timeline-year">1950s</div>
+                        <h3 class="ai-timeline-title">人工智能的诞生</h3>
+                        <p class="ai-timeline-description">1956年，达特茅斯会议正式确立了"人工智能"这一学科。艾伦·图灵提出了著名的图灵测试，用于判断机器是否具有与人类相当的智能。</p>
+                    </div>
+                    
+                    <div class="ai-timeline-item">
+                        <div class="ai-timeline-year">1980s-1990s</div>
+                        <h3 class="ai-timeline-title">专家系统与机器学习</h3>
+                        <p class="ai-timeline-description">专家系统在特定领域取得成功。机器学习算法如决策树、支持向量机等开始发展，为AI的进步奠定基础。</p>
+                    </div>
+                    
+                    <div class="ai-timeline-item">
+                        <div class="ai-timeline-year">2010s</div>
+                        <h3 class="ai-timeline-title">深度学习革命</h3>
+                        <p class="ai-timeline-description">深度神经网络在图像识别、语音识别和自然语言处理等领域取得突破性进展。AlexNet、ResNet等网络架构推动了计算机视觉的发展。</p>
+                    </div>
+                    
+                    <div class="ai-timeline-item">
+                        <div class="ai-timeline-year">2017-2019</div>
+                        <h3 class="ai-timeline-title">Transformer与预训练模型</h3>
+                        <p class="ai-timeline-description">Transformer架构的提出彻底改变了NLP领域。BERT、GPT等预训练语言模型展现出强大的语言理解和生成能力。</p>
+                    </div>
+                    
+                    <div class="ai-timeline-item">
+                        <div class="ai-timeline-year">2020s至今</div>
+                        <h3 class="ai-timeline-title">大型语言模型与多模态AI</h3>
+                        <p class="ai-timeline-description">GPT-3/4、LLaMA等大型语言模型展现出惊人的能力。多模态AI系统如DALL-E、Midjourney实现了跨模态理解和生成。</p>
+                    </div>
+                </div>
+            </section>
+            
+            <section class="applications-section">
+                <h2 class="section-title">
+                    <i class="fas fa-rocket"></i> AI应用领域
+                    <span class="section-subtitle">人工智能改变世界的方式</span>
+                </h2>
+                
+                <div class="ai-grid">
+                    <div class="ai-card">
+                        <div class="ai-card-image" style="background-image: url('https://images.unsplash.com/photo-1576091160550-2173dba999ef?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80');"></div>
+                        <div class="ai-card-content">
+                            <h3 class="ai-card-title">医疗健康</h3>
+                            <p class="ai-card-description">AI在医学影像分析、药物研发、疾病预测和个性化医疗方案制定等方面发挥重要作用。</p>
+                            <a href="#" class="ai-card-link">探索案例 <i class="fas fa-arrow-right"></i></a>
+                        </div>
+                    </div>
+                    
+                    <div class="ai-card">
+                        <div class="ai-card-image" style="background-image: url('https://images.unsplash.com/photo-1526304640581-d334cdbbf45e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80');"></div>
+                        <div class="ai-card-content">
+                            <h3 class="ai-card-title">金融科技</h3>
+                            <p class="ai-card-description">AI在风险评估、欺诈检测、算法交易和个性化金融服务等领域广泛应用。</p>
+                            <a href="#" class="ai-card-link">探索案例 <i class="fas fa-arrow-right"></i></a>
+                        </div>
+                    </div>
+                    
+                    <div class="ai-card">
+                        <div class="ai-card-image" style="background-image: url('https://images.unsplash.com/photo-1581092921461-eab62e97a780?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80');"></div>
+                        <div class="ai-card-content">
+                            <h3 class="ai-card-title">智能制造</h3>
+                            <p class="ai-card-description">AI驱动的预测性维护、质量控制、供应链优化和自动化生产流程，提高制造业效率。</p>
+                            <a href="#" class="ai-card-link">探索案例 <i class="fas fa-arrow-right"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+    
+    <script>
+        // 页面滚动动画效果
+        document.addEventListener('DOMContentLoaded', () => {
+            const animateOnScroll = () => {
+                const elements = document.querySelectorAll('.ai-card, .ai-timeline-item');
+                
+                elements.forEach(element => {
+                    const elementTop = element.getBoundingClientRect().top;
+                    const elementVisible = 150;
+                    
+                    if (elementTop < window.innerHeight - elementVisible) {
+                        element.classList.add('animate__animated', 'animate__fadeInUp');
+                    }
+                });
+            };
+            
+            // 初始检查
+            animateOnScroll();
+            
+            // 滚动时检查
+            window.addEventListener('scroll', animateOnScroll);
+        });
+    </script>
+    <script src="../public/js/sidebar-unifier.js" defer></script>
+</body>
+</html>

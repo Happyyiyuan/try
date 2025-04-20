@@ -1,0 +1,112 @@
+{
+  "products": [
+    {
+      "id": "p1",
+      "name": "智能手机 Pro Max",
+      "category": "phone",
+      "description": "最新旗舰智能手机，搭载高通骁龙8 Gen 2处理器，6.7英寸AMOLED屏幕，120Hz刷新率，5000mAh电池。",
+      "price": 6999,
+      "image": "https://images.unsplash.com/photo-1598327105666-5b89351aff97?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8c21hcnRwaG9uZXxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=500&q=60",
+      "rating": 4.8,
+      "featured": true,
+      "specs": {
+        "processor": "骁龙8 Gen 2",
+        "ram": "12GB",
+        "storage": "256GB",
+        "camera": "108MP主摄 + 48MP超广角 + 12MP长焦",
+        "battery": "5000mAh",
+        "display": "6.7英寸AMOLED 120Hz"
+      }
+    },
+    {
+      "id": "p2",
+      "name": "轻薄折叠屏手机",
+      "category": "phone",
+      "description": "创新折叠屏设计，展开后达到7.6英寸，搭载高通骁龙8+ Gen 1处理器，支持多任务分屏操作。",
+      "price": 9999,
+      "image": "https://images.unsplash.com/photo-1659806792559-4b73f5f1e2f2?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MXx8Zm9sZGFibGUlMjBwaG9uZXxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=500&q=60",
+      "rating": 4.6,
+      "featured": true,
+      "specs": {
+        "processor": "骁龙8+ Gen 1",
+        "ram": "12GB",
+        "storage": "512GB",
+        "camera": "50MP主摄 + 12MP超广角",
+        "battery": "4400mAh",
+        "display": "外屏6.2英寸，内屏7.6英寸"
+      }
+    },
+    {
+      "id": "p3",
+      "name": "超长续航手机",
+      "category": "phone",
+      "description": "专注于电池续航的智能手机，配备6000mAh超大电池，支持65W快充，中端处理器提供均衡性能。",
+      "price": 2999,
+      "image": "https://images.unsplash.com/photo-1605236453806-6ff36851218e?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8YmF0dGVyeSUyMHBob25lfGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=500&q=60",
+      "rating": 4.5,
+      "featured": false,
+      "specs": {
+        "processor": "骁龙778G",
+        "ram": "8GB",
+        "storage": "128GB",
+        "camera": "64MP主摄 + 8MP超广角",
+        "battery": "6000mAh",
+        "display": "6.5英寸LCD 90Hz"
+      }
+    },
+    {
+      "id": "p4",
+      "name": "游戏手机 Elite",
+      "category": "phone",
+      "description": "专为游戏玩家设计的高性能手机，配备散热系统，肩键触控，144Hz高刷新率屏幕，立体声扬声器。",
+      "price": 5499,
+      "image": "https://images.unsplash.com/photo-1662947995584-e2b17bb7fb07?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8M3x8Z2FtaW5nJTIwcGhvbmV8ZW58MHx8MHx8&auto=format&fit=crop&w=500&q=60",
+      "rating": 4.7,
+      "featured": false,
+      "specs": {
+        "processor": "骁龙8+ Gen 1",
+        "ram": "16GB",
+        "storage": "256GB",
+        "camera": "64MP主摄",
+        "battery": "5500mAh",
+        "display": "6.8英寸AMOLED 144Hz"
+      }
+    },
+    {
+      "id": "p5",
+      "name": "轻薄5G手机",
+      "category": "phone",
+      "description": "轻薄设计的5G智能手机，重量仅169克，厚度7.3mm，支持全网通5G，适合商务人士使用。",
+      "price": 3999,
+      "image": "https://images.unsplash.com/photo-1546054454-aa26e2b734c7?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8M3x8dGhpbiUyMHBob25lfGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=500&q=60",
+      "rating": 4.3,
+      "featured": false,
+      "specs": {
+        "processor": "骁龙780G",
+        "ram": "8GB",
+        "storage": "128GB",
+        "camera": "50MP主摄 + 13MP超广角",
+        "battery": "4500mAh",
+        "display": "6.4英寸AMOLED 90Hz"
+      }
+    },
+    {
+      "id": "p6",
+      "name": "拍照旗舰手机",
+      "category": "phone",
+      "description": "专注于摄影体验的旗舰手机，配备1英寸超大底传感器，蔡司光学镜头，8K视频录制，专业模式支持RAW格式。",
+      "price": 5999,
+      "image": "https://images.unsplash.com/photo-1516724562728-afc824a36e84?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8OHx8Y2FtZXJhJTIwcGhvbmV8ZW58MHx8MHx8&auto=format&fit=crop&w=500&q=60",
+      "rating": 4.9,
+      "featured": true,
+      "specs": {
+        "processor": "骁龙8 Gen 2",
+        "ram": "12GB",
+        "storage": "256GB",
+        "camera": "1英寸50MP主摄 + 48MP超广角 + 12MP长焦",
+        "battery": "4800mAh",
+        "display": "6.7英寸AMOLED 120Hz"
+      }
+    }
+  ]
+}

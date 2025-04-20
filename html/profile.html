@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>个人中心 - AI科技知识库</title>
+    <link rel="stylesheet" href="/public/css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="icon" href="https://cdn-icons-png.flaticon.com/512/2103/2103652.png" type="image/png">
+    <script src="../public/js/config.js"></script> <!-- Removed defer -->
+    <script src="../public/js/main.js" defer></script>
+    <script src="../public/js/auth.js" defer></script> <!-- Restored defer -->
+    <script src="../public/js/profile.js" defer></script>
+    <style>
+        .profile-container {
+            display: flex;
+            flex-direction: column;
+            gap: var(--spacing-xl);
+        }
+
+        .profile-header {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-lg);
+            padding: var(--spacing-lg);
+            background: var(--card-bg);
+            border-radius: var(--border-radius-lg);
+            box-shadow: var(--shadow-md);
+        }
+
+        .profile-avatar {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid var(--primary-color);
+        }
+
+        .profile-info {
+            flex: 1;
+        }
+
+        .profile-username {
+            font-size: 24px;
+            font-weight: var(--font-weight-bold);
+            margin: 0 0 var(--spacing-xs);
+        }
+
+        .profile-email {
+            color: var(--text-secondary);
+            margin: 0 0 var(--spacing-sm);
+            font-size: 14px;
+        }
+
+        .profile-stats {
+            display: flex;
+            gap: var(--spacing-lg);
+            margin-top: var(--spacing-sm);
+        }
+
+        .stat-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .stat-value {
+            font-weight: var(--font-weight-bold);
+            font-size: 18px;
+            color: var(--primary-color);
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+
+        .profile-actions {
+            display: flex;
+            gap: var(--spacing-md);
+        }
+
+        .profile-btn {
+            padding: 8px 16px;
+            border-radius: var(--border-radius-md);
+            font-size: 14px;
+            font-weight: var(--font-weight-medium);
+            cursor: pointer;
+            transition: var(--transition-base);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border: none;
+        }
+
+        .profile-btn i {
+            margin-right: 6px;
+        }
+
+        .btn-edit-profile {
+            background: rgba(99, 102, 241, 0.1);
+            color: var(--primary-color);
+        }
+
+        .btn-edit-profile:hover {
+            background: rgba(99, 102, 241, 0.2);
+        }
+
+        .btn-logout {
+            background: rgba(244, 63, 94, 0.1);
+            color: var(--accent-color);
+        }
+
+        .btn-logout:hover {
+            background: rgba(244, 63, 94, 0.2);
+        }
+
+        .tabs-container {
+            margin-bottom: var(--spacing-lg);
+        }
+
+        .tabs-nav {
+            display: flex;
+            border-bottom: 1px solid var(--border-color);
+            margin-bottom: var(--spacing-lg);
+        }
+
+        .tab-item {
+            padding: var(--spacing-md) var(--spacing-lg);
+            cursor: pointer;
+            color: var(--text-secondary);
+            font-weight: var(--font-weight-medium);
+            position: relative;
+            transition: var(--transition-base);
+        }
+
+        .tab-item:hover {
+            color: var(--primary-color);
+        }
+
+        .tab-item.active {
+            color: var(--primary-color);
+        }
+
+        .tab-item.active::after {
+            content: '';
+            position: absolute;
+            bottom: -1px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: var(--primary-color);
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .submissions-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: var(--spacing-lg);
+        }
+
+        .submission-card {
+            background: var(--card-bg);
+            border-radius: var(--border-radius-md);
+            overflow: hidden;
+            box-shadow: var(--shadow-sm);
+            transition: var(--transition-base);
+            position: relative;
+        }
+
+        .submission-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .submission-image {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+        }
+
+        .submission-content {
+            padding: var(--spacing-md);
+        }
+
+        .submission-title {
+            margin: 0 0 var(--spacing-sm);
+            font-size: 18px;
+            font-weight: var(--font-weight-semibold);
+        }
+
+        .submission-meta {
+            display: flex;
+            justify-content: space-between;
+            color: var(--text-secondary);
+            font-size: 12px;
+            margin-bottom: var(--spacing-sm);
+        }
+
+        .submission-description {
+            color: var(--text-secondary);
+            font-size: 14px;
+            margin-bottom: var(--spacing-md);
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .submission-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-bottom: var(--spacing-sm);
+        }
+
+        .submission-tag {
+            padding: 4px 8px;
+            background: rgba(99, 102, 241, 0.1);
+            color: var(--primary-color);
+            border-radius: 12px;
+            font-size: 12px;
+        }
+
+        .submission-status {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: var(--font-weight-medium);
+        }
+
+        .status-pending {
+            background: rgba(245, 158, 11, 0.1);
+            color: var(--warning-color);
+        }
+
+        .status-approved {
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--success-color);
+        }
+
+        .status-rejected {
+            background: rgba(244, 63, 94, 0.1);
+            color: var(--accent-color);
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: var(--spacing-xl);
+            color: var(--text-secondary);
+        }
+
+        .empty-state i {
+            font-size: 48px;
+            margin-bottom: var(--spacing-md);
+            opacity: 0.5;
+        }
+
+        .empty-state p {
+            margin-bottom: var(--spacing-md);
+        }
+
+        .btn-create {
+            background: linear-gradient(to right, var(--gradient-start), var(--gradient-end));
+            color: white;
+            padding: 10px 20px;
+            border-radius: var(--border-radius-md);
+            font-weight: var(--font-weight-medium);
+            display: inline-flex;
+            align-items: center;
+            text-decoration: none;
+        }
+
+        .btn-create i {
+            margin-right: 8px;
+        }
+
+        .btn-create:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .edit-profile-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            overflow-y: auto;
+        }
+
+        .modal-content {
+            background: var(--card-bg);
+            border-radius: var(--border-radius-lg);
+            max-width: 500px;
+            margin: 40px auto;
+            box-shadow: var(--shadow-xl);
+            position: relative;
+        }
+
+        .modal-header {
+            padding: var(--spacing-lg) var(--spacing-xl);
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-title {
+            margin: 0;
+            font-size: 20px;
+            font-weight: var(--font-weight-semibold);
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 20px;
+            cursor: pointer;
+            color: var(--text-secondary);
+            transition: var(--transition-base);
+        }
+
+        .modal-close:hover {
+            color: var(--accent-color);
+        }
+
+        .modal-body {
+            padding: var(--spacing-xl);
+        }
+
+        .modal-footer {
+            padding: var(--spacing-lg) var(--spacing-xl);
+            border-top: 1px solid var(--border-color);
+            display: flex;
+            justify-content: flex-end;
+            gap: var(--spacing-md);
+        }
+
+        .avatar-selection {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: var(--spacing-sm);
+        }
+
+        .avatar-option {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            cursor: pointer;
+            border: 2px solid transparent;
+            transition: var(--transition-base);
+        }
+
+        .avatar-option:hover {
+            transform: scale(1.1);
+        }
+
+        .avatar-option.selected {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.3);
+        }
+        
+        .avatar-type-selection {
+            display: flex;
+            gap: var(--spacing-lg);
+            margin-bottom: var(--spacing-md);
+        }
+        
+        .radio-option {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-xs);
+        }
+        
+        .radio-option label {
+            margin-bottom: 0;
+            cursor: pointer;
+        }
+        
+        .custom-avatar-preview {
+            display: flex;
+            justify-content: center;
+            margin-bottom: var(--spacing-md);
+        }
+        
+        .file-upload-container {
+            margin-bottom: var(--spacing-md);
+        }
+        
+        .upload-hint {
+            font-size: 12px;
+            color: var(--text-secondary);
+            margin-top: var(--spacing-xs);
+        }
+
+        @media (max-width: 768px) {
+            .profile-header {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .profile-stats {
+                justify-content: center;
+            }
+
+            .profile-actions {
+                justify-content: center;
+            }
+
+            .submissions-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="/public/css/sidebar-enhancements.css">
+</head>
+
+<body>
+    <div class="container">
+        <aside class="sidebar">
+            <div class="logo-container">
+                <div class="logo-text">
+                    <i class="fas fa-microchip"></i>
+                    <h2>AI科技库</h2>
+                </div>
+                <button id="theme-toggle">
+                    <i class="fas fa-moon"></i>
+                </button>
+            </div>
+            
+            <div class="category-nav">
+                <h3 class="section-title">导航</h3>
+                <button data-href="/index.html""><i class="fas fa-home"></i> 首页</button>
+                <button data-href="/submit.html""><i class="fas fa-edit"></i> 发布内容</button>
+                <button class="active"><i class="fas fa-user"></i> 个人中心</button>
+                <button data-href="/admin.html"" class="admin-only" style="display: none;"><i class="fas fa-user-shield"></i> 管理员入口</button>
+            </div>
+            
+            <div class="tags-container">
+                <h3 class="section-title">热门标签</h3>
+                <div class="tags-wrapper">
+                    <span class="tag">#人工智能</span>
+                    <span class="tag">#深度学习</span>
+                    <span class="tag">#智能手机</span>
+                    <span class="tag">#可穿戴设备</span>
+                </div>
+            </div>
+        </aside>
+        
+        <main class="main-content">
+            <div class="header-section">
+                <div class="header-content">
+                    <div>
+                        <h1 class="main-title">个人中心</h1>
+                        <p class="subtitle">管理您的个人信息和发布的内容</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="profile-container card">
+                <div class="profile-header">
+                    <div class="avatar-section">
+                        <div id="custom-avatar-container" class="custom-avatar-container">
+                            <img src="/public/images/default-avatar.png" alt="用户头像" class="profile-avatar" id="avatar-preview">
+                            <div class="avatar-overlay">
+                                <i class="fas fa-camera"></i>
+                                <span>更换头像</span>
+                            </div>
+                        </div>
+                        <input type="file" id="avatar-upload" accept="image/*" style="display: none;">
+                        <div id="upload-status" class="upload-status" style="display: none;">
+                            <div id="upload-progress-bar" class="upload-progress-bar"></div>
+                            <span id="upload-status-message"></span>
+                        </div>
+                    </div>
+                    <div class="profile-info">
+                        <h2 class="profile-username" id="user-name">用户名加载中...</h2>
+                        <p class="profile-email" id="user-email">邮箱加载中...</p>
+                        <button id="edit-profile-btn" class="btn btn-secondary btn-sm">编辑资料</button>
+                    </div>
+                </div>
+
+                <div class="profile-stats">
+                    <div class="stat-item">
+                        <span class="stat-value" id="posts-count">-</span>
+                        <span class="stat-label">我的发布</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-value" id="approved-count">-</span>
+                        <span class="stat-label">已通过</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-value" id="pending-count">-</span>
+                        <span class="stat-label">审核中</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-value" id="rejected-count">-</span>
+                        <span class="stat-label">未通过</span>
+                    </div>
+                </div>
+
+                <div class="profile-tabs">
+                    <div class="tab-navigation">
+                        <button class="tab-item active" data-tab="my-posts">我的发布</button>
+                        <button class="tab-item" data-tab="approved">已通过</button>
+                        <button class="tab-item" data-tab="pending">审核中</button>
+                        <button class="tab-item" data-tab="rejected">未通过</button>
+                        <!-- <button class="tab-item" data-tab="favorites">我的收藏</button> -->
+                        <button id="logout-btn" class="btn btn-danger btn-sm logout-button">退出登录</button>
+                    </div>
+
+                    <div class="tab-content active" id="my-posts">
+                        <h3>我的发布</h3>
+                        <div class="submissions-grid" id="my-posts-submissions-container">
+                            <!-- Submissions loaded here -->
+                        </div>
+                        <div class="empty-state" id="my-posts-empty-state" style="display: none;">
+                            <i class="fas fa-folder-open"></i>
+                            <p>您还没有发布任何内容。</p>
+                            <a href="/html/submit.html" class="btn btn-primary">去发布</a>
+                        </div>
+                    </div>
+                    <div class="tab-content" id="approved">
+                        <h3>已通过的内容</h3>
+                        <div class="submissions-grid" id="approved-submissions-container">
+                            <!-- Submissions loaded here -->
+                        </div>
+                        <div class="empty-state" id="approved-empty-state" style="display: none;">
+                            <i class="fas fa-check-circle"></i>
+                            <p>您还没有已通过的内容。</p>
+                        </div>
+                    </div>
+                    <div class="tab-content" id="pending">
+                        <h3>审核中的内容</h3>
+                        <div class="submissions-grid" id="pending-submissions-container">
+                            <!-- Submissions loaded here -->
+                        </div>
+                        <div class="empty-state" id="pending-empty-state" style="display: none;">
+                            <i class="fas fa-clock"></i>
+                            <p>您没有正在审核中的内容。</p>
+                        </div>
+                    </div>
+                    <div class="tab-content" id="rejected">
+                        <h3>未通过的内容</h3>
+                        <div class="submissions-grid" id="rejected-submissions-container">
+                            <!-- Submissions loaded here -->
+                        </div>
+                        <div class="empty-state" id="rejected-empty-state" style="display: none;">
+                            <i class="fas fa-times-circle"></i>
+                            <p>您没有未通过的内容。</p>
+                        </div>
+                    </div>
+                    <!-- <div class="tab-content" id="favorites">
+                        <h3>我的收藏</h3>
+                        <div class="submissions-grid" id="favorites-container">
+                            </div>
+                        <div class="empty-state" id="favorites-empty-state" style="display: none;">
+                            <i class="fas fa-heart-broken"></i>
+                            <p>您还没有收藏任何内容。</p>
+                        </div>
+                    </div> -->
+                </div>
+            </div>
+        </main>
+
+        <!-- Edit Profile Modal -->
+        <div id="edit-profile-modal" class="modal">
+            <div class="modal-content card">
+                <span class="close-button">&times;</span>
+                <h2>编辑个人资料</h2>
+                <form id="edit-profile-form" class="form-modern">
+                    <div class="form-group">
+                        <label for="edit-username">用户名</label>
+                        <input type="text" id="edit-username" name="edit-username" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="edit-email">邮箱</label>
+                        <input type="email" id="edit-email" name="edit-email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="edit-bio">个人简介</label>
+                        <textarea id="edit-bio" name="edit-bio" rows="3"></textarea>
+                    </div>
+                    <hr>
+                    <h4>修改密码 (可选)</h4>
+                    <div class="form-group">
+                        <label for="edit-current-password">当前密码</label>
+                        <input type="password" id="edit-current-password" name="edit-current-password">
+                    </div>
+                    <div class="form-group">
+                        <label for="edit-new-password">新密码</label>
+                        <input type="password" id="edit-new-password" name="edit-new-password">
+                    </div>
+                    <div class="form-group">
+                        <label for="edit-confirm-password">确认新密码</label>
+                        <input type="password" id="edit-confirm-password" name="edit-confirm-password">
+                    </div>
+                    <button type="submit" class="btn btn-primary">保存更改</button>
+                </form>
+            </div>
+        </div>
+
+    </div>
+
+    <script src="/public/js/config.js"></script>
+    <script src="/public/js/main.js"></script>
+    <script src="/public/js/profile.js"></script>
+    <script src="../public/js/sidebar-unifier.js" defer></script>
+</body>
+</html>

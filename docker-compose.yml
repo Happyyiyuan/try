@@ -1,0 +1,17 @@
+version: '3'
+
+services:
+  websocket:
+    build: .
+    container_name: techvault-websocket
+    restart: always
+    ports:
+      - "8081:8081"
+    volumes:
+      - ./logs:/app/logs
+    networks:
+      - techvault-network
+
+networks:
+  techvault-network:
+    driver: bridge

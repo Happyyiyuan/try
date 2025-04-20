@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>机器学习知识库</title>
+    <link rel="stylesheet" href="/public/css/styles.css">
+    <link rel="stylesheet" href="/public/css/sidebar-enhancements.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="icon" href="https://cdn-icons-png.flaticon.com/512/2103/2103652.png" type="image/png">
+    <meta name="description" content="机器学习知识库 - 探索机器学习算法、框架和实践应用">
+    <meta name="keywords" content="机器学习,算法,数据科学,监督学习,无监督学习,强化学习,深度学习">
+    <meta name="author" content="AI科技库团队">
+    <script src="../public/js/config.js"></script>
+    <script src="../public/js/main.js" defer></script>
+    <script src="../public/js/sidebar-loader.js" defer></script>
+    <script src="../public/js/seo-meta-tags.js" defer></script>
+    <script src="../public/js/analytics.js" defer></script>
+    <style>
+        .ml-hero {
+            position: relative;
+            height: 300px;
+            border-radius: var(--border-radius-lg);
+            overflow: hidden;
+            margin-bottom: 32px;
+            box-shadow: var(--shadow-lg);
+        }
+        
+        .ml-hero-image {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: 1;
+        }
+        
+        .ml-hero-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to right, rgba(0,0,0,0.8), rgba(0,0,0,0.4));
+            z-index: 2;
+        }
+        
+        .ml-hero-content {
+            position: relative;
+            z-index: 3;
+            padding: 40px;
+            color: white;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        
+        .ml-hero-title {
+            font-size: 36px;
+            font-weight: 700;
+            margin-bottom: 16px;
+            max-width: 60%;
+        }
+        
+        .ml-hero-subtitle {
+            font-size: 18px;
+            max-width: 60%;
+            line-height: 1.6;
+            margin-bottom: 24px;
+            color: rgba(255,255,255,0.9);
+        }
+        
+        .ml-hero-button {
+            display: inline-flex;
+            align-items: center;
+            padding: 12px 24px;
+            background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
+            color: white;
+            border: none;
+            border-radius: 30px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        }
+        
+        .ml-hero-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 15px rgba(0,0,0,0.25);
+        }
+        
+        .ml-hero-button i {
+            margin-left: 8px;
+        }
+        
+        .ml-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 24px;
+            margin-top: 32px;
+        }
+        
+        .ml-card {
+            background: var(--card-bg);
+            border-radius: var(--border-radius-md);
+            overflow: hidden;
+            box-shadow: var(--shadow-md);
+            transition: all 0.3s ease;
+            border: 1px solid var(--border-color);
+        }
+        
+        .ml-card:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--shadow-lg);
+            border-color: var(--primary-color);
+        }
+        
+        .ml-card-header {
+            padding: 16px 24px;
+            background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
+            color: white;
+        }
+        
+        .ml-card-title {
+            font-size: 18px;
+            font-weight: 700;
+            margin: 0;
+            display: flex;
+            align-items: center;
+        }
+        
+        .ml-card-title i {
+            margin-right: 10px;
+        }
+        
+        .ml-card-content {
+            padding: 24px;
+        }
+        
+        .ml-card-description {
+            color: var(--text-secondary);
+            margin-bottom: 16px;
+            line-height: 1.6;
+        }
+        
+        .ml-card-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        
+        .ml-card-list li {
+            padding: 8px 0;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+        }
+        
+        .ml-card-list li:last-child {
+            border-bottom: none;
+        }
+        
+        .ml-card-list li i {
+            color: var(--primary-color);
+            margin-right: 10px;
+        }
+        
+        .ml-comparison {
+            margin-top: 40px;
+            overflow-x: auto;
+        }
+        
+        .ml-comparison table {
+            width: 100%;
+            border-collapse: collapse;
+            border-radius: var(--border-radius-md);
+            overflow: hidden;
+            box-shadow: var(--shadow-md);
+        }
+        
+        .ml-comparison th {
+            background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
+            color: white;
+            padding: 16px;
+            text-align: left;
+            font-weight: 600;
+        }
+        
+        .ml-comparison td {
+            padding: 16px;
+            border-bottom: 1px solid var(--border-color);
+            background: var(--card-bg);
+        }
+        
+        .ml-comparison tr:last-child td {
+            border-bottom: none;
+        }
+        
+        .ml-comparison td:first-child {
+            font-weight: 600;
+        }
+        
+        .ml-feature-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 24px;
+            margin-top: 32px;
+        }
+        
+        .ml-feature-item {
+            background: var(--card-bg);
+            border-radius: var(--border-radius-md);
+            padding: 24px;
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--border-color);
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+        
+        .ml-feature-item:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-md);
+            border-color: var(--primary-color);
+        }
+        
+        .ml-feature-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 16px;
+            color: white;
+            font-size: 24px;
+        }
+        
+        .ml-feature-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+        
+        .ml-feature-description {
+            color: var(--text-secondary);
+            font-size: 14px;
+            line-height: 1.6;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <aside class="sidebar">
+            <div class="logo-container">
+                <div class="logo-text">
+                    <i class="fas fa-microchip"></i>
+                    <h2>AI科技库</h2>
+                </div>
+                <button id="theme-toggle">
+                    <i class="fas fa-moon"></i>
+                </button>
+            </div>
+            
+            <div class="category-nav">
+                <h3 class="section-title">分类导航</h3>
+                <button data-href="/index.html"><i class="fas fa-th-large"></i> 全部内容</button>
+                <button data-href="/html/phone.html"><i class="fas fa-mobile-alt"></i> 手机科技</button>
+                <button data-href="/html/computer.html"><i class="fas fa-laptop"></i> 电脑配件</button>
+                <button data-href="/html/digital.html"><i class="fas fa-headphones"></i> 数码产品</button>
+                <button data-href="/html/ai.html"><i class="fas fa-microchip"></i> AI技术</button>
+                <button class="active"><i class="fas fa-robot"></i> 机器学习</button>
+                <button data-href="/html/deep-learning.html"><i class="fas fa-brain"></i> 深度学习</button>
+            </div>
+            
+            <div class="tags-container">
+                <h3 class="section-title">热门标签</h3>
+                <div class="tags-wrapper">
+                    <span class="tag">#监督学习</span>
+                    <span class="tag">#无监督学习</span>
+                    <span class="tag">#强化学习</span>
+                    <span class="tag">#神经网络</span>
+                    <span class="tag">#深度学习</span>
+                    <span class="tag">#数据科学</span>
+                </div>
+            </div>
+        </aside>
+        
+        <main class="main-content">
+            <div class="ml-hero">
+                <img src="https://images.unsplash.com/photo-1620712943543-bcc4688e7485?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80" alt="机器学习" class="ml-hero-image">
+                <div class="ml-hero-overlay"></div>
+                <div class="ml-hero-content">
+                    <h1 class="ml-hero-title">探索机器学习的无限可能</h1>
+                    <p class="ml-hero-subtitle">从基础算法到前沿应用，了解机器学习如何改变我们的世界</p>
+                    <button class="ml-hero-button">开始学习 <i class="fas fa-arrow-right"></i></button>
+                </div>
+            </div>
+            
+            <section>
+                <h2 class="section-title">
+                    <i class="fas fa-graduation-cap"></i> 机器学习基础
+                    <span class="section-subtitle">核心概念与学习路径</span>
+                </h2>
+                
+                <div class="ml-grid">
+                    <div class="ml-card">
+                        <div class="ml-card-header">
+                            <h3 class="ml-card-title"><i class="fas fa-brain"></i> 监督学习</h3>
+                        </div>
+                        <div class="ml-card-content">
+                            <p class="ml-card-description">监督学习是机器学习的一种方法，通过标记数据训练模型，使其能够预测未知数据的标签。</p>
+                            <ul class="ml-card-list">
+                                <li><i class="fas fa-check-circle"></i> 分类算法</li>
+                                <li><i class="fas fa-check-circle"></i> 回归算法</li>
+                                <li><i class="fas fa-check-circle"></i> 决策树与随机森林</li>
+                                <li><i class="fas fa-check-circle"></i> 支持向量机</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="ml-card">
+                        <div class="ml-card-header">
+                            <h3 class="ml-card-title"><i class="fas fa-project-diagram"></i> 无监督学习</h3>
+                        </div>
+                        <div class="ml-card-content">
+                            <p class="ml-card-description">无监督学习通过分析未标记数据中的模式和结构，发现数据的内在规律和特征。</p>
+                            <ul class="ml-card-list">
+                                <li><i class="fas fa-check-circle"></i> 聚类算法</li>
+                                <li><i class="fas fa-check-circle"></i> 降维技术</li>
+                                <li><i class="fas fa-check-circle"></i> 异常检测</li>
+                                <li><i class="fas fa-check-circle"></i> 关联规则学习</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="ml-card">
+                        <div class="ml-card-header">
+                            <h3 class="ml-card-title"><i class="fas fa-gamepad"></i> 强化学习</h3>
+                        </div>
+                        <div class="ml-card-content">
+                            <p class="ml-card-description">强化学习通过与环境交互，学习如何采取行动以最大化累积奖励，适用于决策序列问题。</p>
+                            <ul class="ml-card-list">
+                                <li><i class="fas fa-check-circle"></i> 马尔可夫决策过程</li>
+                                <li><i class="fas fa-check-circle"></i> Q-learning</li>
+                                <li><i class="fas fa-check-circle"></i> 策略梯度</li>
+                                <li><i class="fas fa-check-circle"></i> 深度强化学习</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            <section style="margin-top: 40px;">
+                <h2 class="section-title">
+                    <i class="fas fa-chart-line"></i> 算法比较
+                    <span class="section-subtitle">常用机器学习算法对比</span>
+                </h2>
+                
+                <div class="ml-comparison">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>算法</th>
+                                <th>适用场景</th>
+                                <th>优势</th>
+                                <th>劣势</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>线性回归</td>
+                                <td>连续值预测，特征与目标变量线性相关</td>
+                                <td>简单易解释，计算效率高</td>
+                                <td>无法处理非线性关系，对异常值敏感</td>
+                            </tr>
+                            <tr>
+                                <td>逻辑回归</td>
+                                <td>二分类问题，概率预测</td>
+                                <td>输出概率解释性强，训练速度快</td>
+                                <td>只适用于线性可分问题，特征工程要求高</td>
+                            </tr>
+                            <tr>
+                                <td>决策树</td>
+                                <td>分类与回归，特征重要性分析</td>
+                                <td>易于理解和可视化，无需特征缩放</td>
+                                <td>容易过拟合，不稳定</td>
+                            </tr>
+                            <tr>
+                                <td>随机森林</td>
+                                <td>高维数据，分类与回归</td>
+                                <td>抗过拟合，处理缺失值能力强</td>
+                                <td>计算复杂度高，黑盒模型</td>
+                            </tr>
+                            <tr>
+                                <td>支持向量机</td>
+                                <td>高维空间分类，小样本学习</td>
+                                <td>在高维空间有效，理论基础扎实</td>
+                                <td>对参数敏感，大数据集训练慢</td>
+                            </tr>
+                            <tr>
+                                <td>K-means</td>
+                                <td>数据分组，市场细分</td>
+                                <td>简单高效，易于实现</td>
+                                <td>需预先指定K值，对初始值敏感</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+            
+            <section style="margin-top: 40px;">
+                <h2 class="section-title">
+                    <i class="fas fa-tools"></i> 机器学习工具与框架
+                    <span class="section-subtitle">开发者必备资源</span>
+                </h2>
+                
+                <div class="ml-feature-list">
+                    <div class="ml-feature-item">
+                        <div class="ml-feature-icon">
+                            <i class="fab fa-python"></i>
+                        </div>
+                        <h3 class="ml-feature-title">scikit-learn</h3>
+                        <p class="ml-feature-description">Python机器学习库，提供简单高效的数据挖掘和分析工具，适合初学者入门。</p>
+                    </div>
+                    
+                    <div class="ml-feature-item">
+                        <div class="ml-feature-icon">
+                            <i class="fas fa-fire"></i>
+                        </div>
+                        <h3 class="ml-feature-title">TensorFlow</h3>
+                        <p class="ml-feature-description">Google开发的开源深度学习框架，支持多种平台，适用于大规模机器学习。</p>
+                    </div>
+                    
+                    <div class="ml-feature-item">
+                        <div class="ml-feature-icon">
+                            <i class="fas fa-eye"></i>
+                        </div>
+                        <h3 class="ml-feature-title">PyTorch</h3>
+                        <p class="ml-feature-description">Facebook开发的深度学习框架，动态计算图设计，适合研究和原型开发。</p>
+                    </div>
+                    
+                    <div class="ml-feature-item">
+                        <div class="ml-feature-icon">
+                            <i class="fas fa-chart-bar"></i>
+                        </div>
+                        <h3 class="ml-feature-title">Pandas</h3>
+                        <p class="ml-feature-description">数据分析和操作库，提供高效的数据结构和数据分析工具。</p>
+                    </div>
+                    
+                    <div class="ml-feature-item">
+                        <div class="ml-feature-icon">
+                            <i class="fas fa-calculator"></i>
+                        </div>
+                        <h3 class="ml-feature-title">NumPy</h3>
+                        <p class="ml-feature-description">科学计算基础库，提供多维数组对象和处理这些数组的工具。</p>
+                    </div>
+                    
+                    <div class="ml-feature-item">
+                        <div class="ml-feature-icon">
+                            <i class="fas fa-project-diagram"></i>
+                        </div>
+                        <h3 class="ml-feature-title">Keras</h3>
+                        <p class="ml-feature-description">高级神经网络API，运行于TensorFlow之上，设计简洁，易于快速实验。</p>
+                    </div>
+                </div>
+            </section>
+            
+            <section style="margin-top: 40px;">
+                <h2 class="section-title">
+                    <i class="fas fa-lightbulb"></i> 实际应用案例
+                    <span class="section-subtitle">机器学习在各行业的应用</span>
+                </h2>
+                
+                <div class="ml-grid">
+                    <div class="ml-card">
+                        <div class="ml-card-header">
+                            <h3 class="ml-card-title"><i class="fas fa-heartbeat"></i> 医疗健康</h3>
+                        </div>
+                        <div class="ml-card-content">
+                            <p class="ml-card-description">机器学习在医学影像分析、疾病预测和个性化治疗方案制定等方面发挥重要作用。</p>
+                            <ul class="ml-card-list">
+                                <li><i class="fas fa-check-circle"></i> 癌症早期检测</li>
+                                <li><i class="fas fa-check-circle"></i> 药物研发加速</li>
+                                <li><i class="fas fa-check-circle"></i> 患者风险评估</li>
+                                <li><i class="fas fa-check-circle"></i> 医疗资源优化</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="ml-card">
+                        <div class="ml-card-header">
+                            <h3 class="ml-card-title"><i class="fas fa-shopping-cart"></i> 零售与电商</h3>
+                        </div>
+                        <div class="ml-card-content">
+                            <p class="ml-card-description">机器学习帮助零售商优化库存管理、个性化推荐和客户行为分析。</p>
+                            <ul class="ml-card-list">
+                                <li><i class="fas fa-check-circle"></i> 商品推荐系统</li>
+                                <li><i class="fas fa-check-circle"></i> 需求预测</li>
+                                <li><i class="fas fa-check-circle"></i> 客户细分</li>
+                                <li><i class="fas fa-check-circle"></i> 价格优化</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="ml-card">
+                        <div class="ml-card-header">
+                            <h3 class="ml-card-title"><i class="fas fa-car"></i> 智能交通</h3>
+                        </div>
+                        <div class="ml-card-content">
+                            <p class="ml-card-description">机器学习在交通流量预测、自动驾驶和智能交通管理系统中的应用。</p>
+                            <ul class="ml-card-list">
+                                <li><i class="fas fa-check-circle"></i> 自动驾驶技术</li>
+                                <li><i class="fas fa-check-circle"></i> 交通拥堵预测</li>
+                                <li><i class="fas fa-check-circle"></i> 路线优化</li>
+                                <li><i class="fas fa-check-circle"></i> 安全系统</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+    
+    <script>
+        // 页面滚动动画效果
+        document.addEventListener('DOMContentLoaded', () => {
+            const animateOnScroll = () => {
+                const elements = document.querySelectorAll('.ml-card, .ml-feature-item');
+                
+                elements.forEach(element => {
+                    const elementTop = element.getBoundingClientRect().top;
+                    const elementVisible = 150;
+                    
+                    if (elementTop < window.innerHeight - elementVisible) {
+                        element.style.opacity = '1';
+                        element.style.transform = 'translateY(0)';
+                    }
+                });
+            };
+            
+            // 设置初始状态
+            document.querySelectorAll('.ml-card, .ml-feature-item').forEach(element => {
+                element.style.opacity = '0';
+                element.style.transform = 'translateY(20px)';
+                element.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+            });
+            
+            // 初始检查
+            setTimeout(animateOnScroll, 300);
+            
+            // 滚动时检查
+            window.addEventListener('scroll', animateOnScroll);
+        });
+    </script>
+    <script src="../public/js/sidebar-unifier.js" defer></script>
+</body>
+</html>

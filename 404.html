@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>页面未找到 - AI科技知识库</title>
+    <link rel="stylesheet" href="/public/css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="icon" href="https://cdn-icons-png.flaticon.com/512/2103/2103652.png" type="image/png">
+    <script src="/public/js/config.js" defer></script>
+    <script src="/public/js/main.js" defer></script>
+    <style>
+        .error-container {
+            text-align: center;
+            padding: 100px 20px;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .error-icon {
+            font-size: 80px;
+            margin-bottom: 30px;
+            background: linear-gradient(to right, var(--gradient-start), var(--gradient-end));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .error-title {
+            font-size: 36px;
+            margin-bottom: 20px;
+            color: var(--text-color);
+        }
+
+        .error-message {
+            font-size: 18px;
+            margin-bottom: 40px;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        .back-home {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(to right, var(--gradient-start), var(--gradient-end));
+            color: white;
+            padding: 12px 24px;
+            border-radius: var(--border-radius-md);
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .back-home:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .back-home i {
+            margin-right: 8px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <main class="main-content" style="width: 100%;">
+            <div class="error-container">
+                <div class="error-icon">
+                    <i class="fas fa-exclamation-circle"></i>
+                </div>
+                <h1 class="error-title">404 - 页面未找到</h1>
+                <p class="error-message">抱歉，您访问的页面不存在或已被移除。请检查URL是否正确，或返回首页继续浏览。</p>
+                <a href="/index.html" class="back-home">
+                    <i class="fas fa-home"></i> 返回首页
+                </a>
+            </div>
+        </main>
+    </div>
+</body>
+
+</html>
